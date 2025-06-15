@@ -27,12 +27,15 @@
 
     {% include 'footer.html' %} {# Stopka strony #}
 
-    {# Link do Bootstrap JS Bundle z CDN (jQuery, Popper.js i Bootstrap JS) #}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    {# Najpierw jQuery #}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    {# Następnie Bootstrap JS Bundle #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdSlTjd4j4kXoMFe71jMOCB" crossorigin="anonymous"></script>
 
     {# Twój własny JS - powinien być po Bootstrap JS #}
     <script src="{% static 'js/script.js' %}"></script>
 
-    {% block extra_body %}{% endblock %}
+    {% block extra_body %}{% endblock %} {# Pozostawiamy ten blok dla specyficznych skryptów strony #}
 </body>
 </html>

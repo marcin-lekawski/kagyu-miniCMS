@@ -1,14 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ page.title }} - Mini CMS{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">{{ page.title }}</h1>
-    {% if page.header_image %}
-        <img src="{{ page.header_image.url }}" alt="{{ page.title }}" class="img-fluid mb-4 rounded">
-    {% endif %}
-    <div class="page-content lead">
-        {{ page.content|safe }} {# Używamy |safe, bo TinyMCE generuje HTML #}
+    <div class="row">
+        {# NOWA KOLEJNOŚĆ: Kolumna na spis treści idzie pierwsza #}
+        <div class="col-md-3 order-md-1">
+    {# Kontener na spis treści desktopowy #}
+    <div id="desktop-toc-container" class="card sticky-top d-none d-md-block" style="top: 20px;">
+        <div class="card-body">
+            <h5 class="card-title">Spis Treści</h5>
+            {# Ten div będzie dynamicznie wypełniany przez JS #}
+            <div id="table-of-contents-desktop"></div>
+        </div>
     </div>
-    <p class="text-muted mt-4">Ostatnia aktualizacja: {{ page.updated_at|date:"Y-m-d H:i" }}</p>
+
+    {# Kontener na spis treści mobilny #}
+    <div id="mobile-toc-container" class="card d-md-none mb-3">
+        <div class="card-body">
+            <button class="btn btn-outline-secondary w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#table-of-contents-mobile-collapse" aria-expanded="false" aria-controls="table-of-contents-mobile-collapse">
+                Pokaż spis treści
+            </button>
+            <div class="collapse" id="table-of-contents-mobile-collapse">
+                {# Ten div będzie dynamicznie wypełniany przez JS #}
+                <div id="table-of-contents-mobile" class="nav flex-column mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+        {# Treść strony idzie po prawej stronie na desktopie #}
+        <div class="col-md-9 order-md-2"> {# order-md-2 sprawia, że na desktopie będzie druga #}
+            <h1 class="mb-4">{{ page.title }}</h1>
+
+            {% if page.header_image %}
+                <img src="{{ page.header_image.url }}" class="img-fluid rounded mb-4" alt="{{ page.title }}" style="max-height: 400px; width: 100%; object-fit: cover;">
+            {% endif %}
+
+            <div id="page-content" class="page-content">
+                {{ page.content|safe }}
+            </div>
+        </div>
+    </div>
+
+    {# PRZYCISK POWROTU NA GÓRĘ STRONY #}
+    <button id="back-to-top" class="btn btn-primary shadow" title="Powrót na górę"> {# Usunięto 'rounded-circle' #}
+        ^ {# Znak Unicode dla daszka/strzałki #}
+    </button>
 {% endblock content %}
+
+{% block extra_body %}
+    {# Skrypt menu #}
+    <script src="{% static 'js/table_of_contents.js' %}"></script>
+{% endblock extra_body %}
