@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - Mini CMS</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 20px; }
+        h1 { color: #333; }
+        .content { margin-top: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: blue; }
+        nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Strona główna</a>
+            {% for page in all_pages %}
+                <a href="{% url 'pages:detail' slug=page.slug %}">{{ page.title }}</a>
+            {% endfor %}
+        </nav>
+    </header>
+
+    <h1>{{ page.title }}</h1>
+    <div class="content">
+        {{ page.content|safe }} {# Użyj |safe, jeśli chcesz renderować HTML z pola content #}
+    </div>
+    <hr>
+    <footer>
+        <p>&copy; 2025 Mini CMS. Ostatnia aktualizacja: {{ page.updated_at|date:"Y-m-d H:i" }}</p>
+    </footer>
+</body>
+</html>
