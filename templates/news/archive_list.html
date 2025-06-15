@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load news_filters %}
 
-{% block title %}Strona Główna - Mini CMS{% endblock %}
+{% block title %}Archiwum Aktualności - Mini CMS{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">Witaj w Twoim Mini CMS!</h1>
-
     <div class="row">
         <div class="col-md-9">
-            <h2 class="mb-3">Najnowsze Aktualności</h2>
+            <h1 class="mb-4">Archiwum Aktualności
+                {% if selected_year %}{{ selected_year }}{% endif %}{% if selected_month %} {{ selected_month|month_name }}{% endif %}
+            </h1>
             {% if articles %}
                 {% for article in articles %}
                     <div class="card mb-3">
@@ -31,30 +31,8 @@
                         </div>
                     </div>
                 {% endfor %}
-
-                {# Paginacja dla strony głównej, jeśli ArticleListView ją obsługuje #}
-                {% if is_paginated %}
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Poprzednia</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Poprzednia</span></li>
-                            {% endif %}
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</span>
-                            </li>
-                            {% if page_obj.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Następna</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Następna</span></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
-
             {% else %}
-                <p class="lead">Brak dostępnych aktualności.</p>
+                <p class="lead">Brak aktualności w tym okresie archiwum.</p>
             {% endif %}
         </div>
 
@@ -87,17 +65,6 @@
                                 Wszystkie aktualności
                             </a>
                         </li>
-                    </ul>
-                </div>
-            </div>
-            {# Możesz dodać tutaj sekcję z linkami do stron statycznych, jeśli chcesz obok aktualności #}
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Nasze Strony</h5>
-                    <ul class="list-unstyled">
-                        {% for page in all_pages %}
-                            <li><a href="{% url 'pages:detail' slug=page.slug %}" class="text-decoration-none">{{ page.title }}</a></li>
-                        {% endfor %}
                     </ul>
                 </div>
             </div>

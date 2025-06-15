@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView 
+from django.views.generic import TemplateView
+from news.views import ArticleListView 
 
 # Dodaj importy do obsługi plików statycznych i mediów
 from django.conf import settings
@@ -30,10 +31,16 @@ urlpatterns = [
     # Dzięki temu użytkownicy będą mogli korzystać z edytora TinyMCE do tworzenia i edycji treści stron.
     path('tinymce/', include('tinymce.urls')),
 
-    # Strona główna - wyświetla szablon 'home.html'
-    # Importujemy TemplateView, aby stworzyć prostą stronę główną
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+
+    # Strona główna - teraz będzie wyświetlać listę aktualności
+    # Możemy zmienić to na TemplateView jeśli chcemy statyczną stronę główną
+    # lub użyć widoku listy aktualności
     
+    path('', ArticleListView.as_view(), name='home'), # Strona główna pokazuje aktualności
+    # Jeśli chcesz, żeby home.html był statyczny, a lista aktualności pod /aktualnosci/ wtedy zahaszuj powyższą linię i odkomentuj poniższą linię:
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('aktualnosci/', include('news.urls')), # Dołącz adresy URL z aplikacji news pod /aktualnosci/
+
     # Dołącz adresy URL z naszej aplikacji 'pages'
     # Każdy adres URL nie pasujący do 'admin/' ani '/' zostanie przekazany do 'pages.urls'
     path('', include('pages.urls')),

@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 {% load news_filters %}
 
-{% block title %}Strona Główna - Mini CMS{% endblock %}
+{% block title %}Aktualności - Mini CMS{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">Witaj w Twoim Mini CMS!</h1>
-
     <div class="row">
         <div class="col-md-9">
-            <h2 class="mb-3">Najnowsze Aktualności</h2>
+            <h1 class="mb-4">Aktualności</h1>
             {% if articles %}
                 {% for article in articles %}
                     <div class="card mb-3">
@@ -32,7 +30,7 @@
                     </div>
                 {% endfor %}
 
-                {# Paginacja dla strony głównej, jeśli ArticleListView ją obsługuje #}
+                {# Paginacja #}
                 {% if is_paginated %}
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
@@ -87,17 +85,6 @@
                                 Wszystkie aktualności
                             </a>
                         </li>
-                    </ul>
-                </div>
-            </div>
-            {# Możesz dodać tutaj sekcję z linkami do stron statycznych, jeśli chcesz obok aktualności #}
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Nasze Strony</h5>
-                    <ul class="list-unstyled">
-                        {% for page in all_pages %}
-                            <li><a href="{% url 'pages:detail' slug=page.slug %}" class="text-decoration-none">{{ page.title }}</a></li>
-                        {% endfor %}
                     </ul>
                 </div>
             </div>

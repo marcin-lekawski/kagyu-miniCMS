@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pages', # Nasza aplikacja 'pages' do zarządzania stronami
+    'news', # Aplikacja 'news' do zarządzania aktualnościami/wydarzeniami w formie bloga
     'tinymce', # Aplikacja TinyMCE do edycji treści
 ]
 
@@ -118,11 +119,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static', # Informuje Django, gdzie szukać dodatkowych plików statycznych
+]
+
+# STATIC_ROOT jest używane podczas 'collectstatic' w środowisku produkcyjnym
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Gdzie pliki będą zbierane dla serwera WWW
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media files (user uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # TinyMCE settings
 TINYMCE_DEFAULT_CONFIG = {

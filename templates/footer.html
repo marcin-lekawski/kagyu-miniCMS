@@ -1,0 +1,24 @@
+{% load static %}
+
+<footer class="mt-auto py-3 bg-danger text-white">
+    {# Usunięto klasę "container" z tego div-a #}
+    <div class="footer-content d-flex flex-column flex-md-row justify-content-between align-items-center"> {# Dodano klasę footer-content #}
+        <span class="text-white mb-2 mb-md-0">&copy; {% now "Y" %} Buddyjski Ośrodek Medytacyjny Karma Kagyu w Rybniku. Wszelkie prawa zastrzeżone.</span>
+
+        {# Panel logowania przeniesiony do stopki #}
+        <ul class="list-inline mb-0 mt-2 mt-md-0">
+            {% if user.is_authenticated %}
+                <li class="list-inline-item">
+                    <span class="text-white small">Witaj, {{ user.username }}!</span>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-light btn-sm">Panel Admina</a>
+                </li>
+            {% else %}
+                <li class="list-inline-item">
+                    <a href="{% url 'admin:login' %}" class="btn btn-outline-light btn-sm">Zaloguj</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</footer>
