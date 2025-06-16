@@ -14,5 +14,5 @@ urlpatterns = [
     path('', views.ArticleListView.as_view(), name='list'),
 
     # Na końcu szczegóły pojedynczej aktualności (catch-all dla slugów)
-    path('<slug:slug>/', views.article_detail, name='detail'),
+    path('<slug:slug>/', views.article_detail, name='article_detail'), # ZMIENIONO: name='detail' na name='article_detail'
 ]

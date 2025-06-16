@@ -1,9 +1,31 @@
-{% load static %}
-{% load news_filters %}
+{# templates/header.html #}
 
-<header>
-    {# Główny pasek nawigacyjny - z menu po lewej i logo po prawej #}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
+{% load static %}
+{% load news_filters %} {# customowe filtry dla aplikacji pobierane z pliku: news/templatetags/news_filters.py#}
+
+<header 
+    {% if header_content and header_content.header_background_image %}
+    class="header-with-background" 
+    style="background-image: url('{{ header_content.header_background_image.url }}');"
+    {% endif %}
+>
+    {# Linia podkreślenia i nazwa ośrodka - PRZESUNIĘTA NA GÓRĘ #}
+    <div class="center-name-section py-2">
+        <div class="container text-center">
+            <h1 class="center-title mb-0">
+                {% if header_content %}
+                    {# header_content.site_name to HTMLField, więc używamy |safe #}
+                    {{ header_content.site_name|safe }}
+                {% else %}
+                    {# Fallback, jeśli z jakiegoś powodu obiekt header_content nie jest dostępny #}
+                    <strong>Buddyjski Ośrodek Medytacyjny</strong>
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+ 
+    <nav class="navbar navbar-expand-lg navbar-light py-3">
         <div class="container-fluid">
 
             {# Przycisk hamburgera dla urządzeń mobilnych - przeniesiony na lewo, przed menu #}
@@ -17,15 +39,19 @@
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" aria-current="page" href="{% url 'home' %}">Strona główna</a>
                     </li>
+                    {# Używamy teraz 'all_pages' z procesora kontekstu. Pamiętaj, żeby strony w panelu admina były 'Opublikowane' i miały ustawioną 'Kolejność'! #}
                     {% for page in all_pages %}
                         <li class="nav-item">
+                            {# To odwołanie do 'pages:detail' pozostaje bez zmian, zgodnie z Twoim oryginalnym kodem #}
                             <a class="nav-link {% if request.resolver_match.url_name == 'detail' and page.slug == request.resolver_match.kwargs.slug %}active{% endif %}" href="{% url 'pages:detail' slug=page.slug %}">{{ page.title }}</a>
                         </li>
                     {% endfor %}
                     <li class="nav-item">
+                        {# To odwołanie do 'news:list' pozostaje bez zmian, zgodnie z Twoim oryginalnym kodem #}
                         <a class="nav-link {% if request.resolver_match.app_name == 'news' and request.resolver_match.url_name == 'list' %}active{% endif %}" href="{% url 'news:list' %}">Aktualności</a>
                     </li>
                     <li class="nav-item">
+                        {# To odwołanie do 'news:archive_all' pozostaje bez zmian, zgodnie z Twoim oryginalnym kodem #}
                         <a class="nav-link {% if request.resolver_match.app_name == 'news' and request.resolver_match.url_name|starts_with:'archive' %}active{% endif %}" href="{% url 'news:archive_all' %}">Archiwum</a>
                     </li>
                 </ul>
@@ -33,18 +59,12 @@
 
             {# Logo strony - przesunięte na prawą stronę #}
             <a class="navbar-brand ms-auto order-lg-last" href="{% url 'home' %}">
-                <img src="{% static 'img/logo_karma_kagyu.png' %}" alt="Logo Karma Kagyu" height="60">
+                {% if header_content and header_content.logo %}
+                    <img src="{{ header_content.logo.url }}" alt="Logo Ośrodka" height="60">
+                {% else %}
+                    <img src="{% static 'static/img/logo_karma_kagyu.png' %}" alt="Logo Karma Kagyu" height="60">
+                {% endif %}
             </a>
         </div>
     </nav>
-
-    {# Linia podkreślenia i nazwa ośrodka #}
-    <div class="center-name-section py-2"> {# Usunięto style inline #}
-        <div class="container text-center">
-            <h1 class="center-title mb-0"> {# Dodano klasę center-title #}
-                <strong>Buddyjski Ośrodek Medytacyjny</strong><br>
-                w Rybniku
-            </h1>
-        </div>
-    </div>
 </header>

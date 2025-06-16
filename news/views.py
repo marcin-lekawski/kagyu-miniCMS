@@ -1,53 +1,120 @@
+# news/views.py
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView # Do listy artykułów
+from django.views.generic import ListView
 from .models import Article
-from django.utils import timezone # Do filtrowania archiwum
-
-# Create your views here.
+from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Do paginacji
+import calendar # Do nazw miesięcy w archiwum
+from django.db.models import Count # Do liczenia artykułów w archiwum
 
 
 class ArticleListView(ListView):
     model = Article
-    template_name = 'news/article_list.html' # Strona z listą artykułów
-    context_object_name = 'articles' # Nazwa zmiennej w szablonie
-    paginate_by = 5 # Opcjonalnie: paginacja, np. 5 artykułów na stronę
+    template_name = 'news/article_list.html'
+    context_object_name = 'articles' # Zostawiamy 'articles' zgodnie z Twoim plikiem
+    paginate_by = 5
 
     def get_queryset(self):
-        # Pobieramy tylko aktualności, które są już opublikowane (data publikacji <= teraz)
-        return Article.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+        # Pobieramy tylko aktualności, które są opublikowane (is_published=True)
+        # i których data publikacji jest mniejsza lub równa bieżącej dacie/czasowi.
+        # Sortowanie: najpierw przypięte (True to 1, False to 0, więc malejąco),
+        # potem data publikacji malejąco (najnowsze na górze).
+        queryset = Article.objects.filter(
+            is_published=True, # DODANO: filtr po statusie opublikowania
+            published_date__lte=timezone.now()
+        ).order_by('-is_pinned', '-published_date') # ZMIENIONO: sortowanie po is_pinned
+        return queryset
+
 
 def article_detail(request, slug):
     """
     Widok wyświetlający szczegóły pojedynczej aktualności.
+    Artykuł musi być opublikowany i mieć datę publikacji <= bieżącej.
     """
-    article = get_object_or_404(Article, slug=slug, published_date__lte=timezone.now())
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+        is_published=True, # DODANO: upewniamy się, że artykuł jest opublikowany
+        published_date__lte=timezone.now()
+    )
     return render(request, 'news/article_detail.html', {'article': article})
 
+
 def archive_view(request, year=None, month=None):
-    articles = Article.objects.filter(published_date__lte=timezone.now())
+    # Początkowy queryset: tylko opublikowane artykuły z datą publikacji <= teraz
+    articles_queryset = Article.objects.filter(
+        is_published=True, # DODANO: upewniamy się, że artykuły są opublikowane
+        published_date__lte=timezone.now()
+    )
 
+    # Filtrowanie po roku i/lub miesiącu, jeśli podano
     if year:
-        articles = articles.filter(published_date__year=year)
+        articles_queryset = articles_queryset.filter(published_date__year=year)
     if month:
-        articles = articles.filter(published_date__month=month)
+        articles_queryset = articles_queryset.filter(published_date__month=month)
 
-    articles = articles.order_by('-published_date')
+    # Sortowanie dla archiwum: najpierw przypięte, potem data publikacji malejąco
+    articles_queryset = articles_queryset.order_by('-is_pinned', '-published_date') # DODANO: sortowanie po is_pinned
 
-    # Pobierz unikalne lata i miesiące do nawigacji archiwum
-    dates = Article.objects.filter(published_date__lte=timezone.now()).dates('published_date', 'month', order='DESC')
-    archive_years = sorted(list(set([d.year for d in dates])), reverse=True)
-    archive_months = {}
-    for d in dates:
-        if d.year not in archive_months:
-            archive_months[d.year] = []
-        if d.month not in archive_months[d.year]:
-            archive_months[d.year].append(d.month)
+    # --- Paginacja ---
+    paginator = Paginator(articles_queryset, 5) # Liczba artykułów na stronę (możesz dostosować)
+    page_number = request.GET.get('page')
+    try:
+        articles_paged = paginator.page(page_number) # Zmieniono nazwę zmiennej na articles_paged
+    except PageNotAnInteger:
+        articles_paged = paginator.page(1)
+    except EmptyPage:
+        articles_paged = paginator.page(paginator.num_pages)
+    # ------------------
+
+    # --- Generowanie danych dla paska bocznego archiwum ---
+    # Pobierz unikalne lata i miesiące z liczbą artykułów dla każdego miesiąca
+    # Tylko z opublikowanych artykułów i tych, których data publikacji <= teraz
+    archive_data = Article.objects.filter(
+        is_published=True,
+        published_date__lte=timezone.now()
+    ).values('published_date__year', 'published_date__month') \
+     .annotate(count=Count('id')) \
+     .order_by('-published_date__year', '-published_date__month')
+
+    # Strukturyzowanie danych archiwum (lata z zagnieżdżonymi miesiącami)
+    archive_years_structured = {}
+    for item in archive_data:
+        year_num = item['published_date__year']
+        month_num = item['published_date__month']
+        
+        if year_num not in archive_years_structured:
+            archive_years_structured[year_num] = []
+        
+        # Dodajemy informacje o miesiącu i liczbie artykułów
+        archive_years_structured[year_num].append({
+            'month_num': month_num,
+            'month_name': calendar.month_name[month_num], # Używamy calendar.month_name
+            'count': item['count']
+        })
+    
+    # Sortowanie miesięcy w ramach każdego roku (od najnowszego do najstarszego)
+    for year_val in archive_years_structured:
+        archive_years_structured[year_val].sort(key=lambda x: x['month_num'], reverse=True)
+    # --------------------------------------------------------
+
+    # --- Dynamiczny tytuł archiwum ---
+    archive_title = "Archiwum"
+    if year and month:
+        try:
+            month_name_str = calendar.month_name[int(month)]
+            archive_title = f"Archiwum: {month_name_str.capitalize()} {year}"
+        except (ValueError, IndexError):
+            pass # Jeśli month jest niepoprawne, pozostanie "Archiwum"
+    elif year:
+        archive_title = f"Archiwum: Rok {year}"
+    # ---------------------------------
 
     context = {
-        'articles': articles,
+        'articles': articles_paged, # Zmieniono nazwę zmiennej na 'articles' dla spójności
         'selected_year': year,
         'selected_month': month,
-        'archive_years': archive_years,
-        'archive_months': archive_months,
+        'archive_years_structured': archive_years_structured, # Przekazujemy ustrukturyzowane dane
+        'archive_title': archive_title, # Dynamiczny tytuł
     }
     return render(request, 'news/archive_list.html', context)

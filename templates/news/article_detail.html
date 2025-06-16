@@ -1,3 +1,4 @@
+{# templates/news/article_detail.html #}
 {% extends 'base.html' %}
 
 {% block title %}{{ article.title }} - Aktualności{% endblock %}
@@ -12,5 +13,5 @@
         {{ article.content|safe }} {# Używamy |safe, bo TinyMCE generuje HTML #}
     </div>
     <p class="text-muted mt-4">Ostatnia aktualizacja: {{ article.updated_at|date:"Y-m-d H:i" }}</p>
-    <a href="{% url 'news:list' %}" class="btn btn-secondary mt-3">Powrót do aktualności</a>
+    <a href="{% url 'news:list' %}" class="btn btn-secondary mt-3">Powrót do aktualności</a> {# Link 'Powrót do aktualności' jest już poprawny #}
 {% endblock content %}

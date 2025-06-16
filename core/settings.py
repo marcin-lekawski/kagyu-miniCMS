@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'pages', # Nasza aplikacja 'pages' do zarządzania stronami
     'news', # Aplikacja 'news' do zarządzania aktualnościami/wydarzeniami w formie bloga
     'tinymce', # Aplikacja TinyMCE do edycji treści
+    'site_config', # Aplikacja 'site_config' do zarządzania konfiguracją strony
 ]
 
 MIDDLEWARE = [
@@ -61,11 +63,15 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.all_pages',
+                'site_config.context_processors.global_website_content', # Tylko ten jeden procesor
             ],
+            'libraries': {
+                'news_filters': 'news.templatetags.news_filters', # Jawne ładowanie filtrów
+            }
         },
     },
 ]

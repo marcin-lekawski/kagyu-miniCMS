@@ -1,6 +1,6 @@
-# news/templatetags/news_filters.py
 from django import template
 import calendar
+import re # Możesz usunąć 'import re', jeśli nie jest używane przez inne filtry
 
 register = template.Library()
 
@@ -32,3 +32,5 @@ def starts_with(value, arg):
     Użycie: {{ some_string|starts_with:"prefix" }}
     """
     return value.startswith(arg)
+
+# --- Pamiętaj, aby usunąć stąd funkcję replace_links_for_footer ---
