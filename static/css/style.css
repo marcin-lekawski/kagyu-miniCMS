@@ -1,642 +1,1320 @@
-/* static/css/style.css */
+/* style.css */
 
-/*
-/----------------------------------------------------------------------------------
-/   1. OGÓLNE STYLE / ZASADNICZE USTAWIENIA
-/----------------------------------------------------------------------------------
-*/
-body {
-    font-family: 'Open Sans', sans-serif;
-    color: #333;
-    line-height: 1.6;
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* Resetowanie i podstawowe style */
+* {
+    outline: 0;
+    box-sizing: border-box;
 }
 
-/* Pseudoelement dla globalnego tła strony */
-body::before {
-    content: "";
+*:before,
+*:after {
+    box-sizing: border-box;
+    outline: 0;
+}
+
+html {
+    position: relative;
+}
+
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
+
+a {
+    -webkit-transition: color 0.1s ease-in-out;
+    transition: color 0.1s ease-in-out;
+}
+
+a:hover,
+a:focus {
+    color: #c1272d;
+    text-decoration: none;
+}
+
+ul,
+ol,
+blockquote {
+    margin-bottom: 40px;
+}
+
+/* Style dla głównego menu (bocznego/overlay) */
+.main-menu {
     position: fixed;
+    width: 40%; /* Szerokość na większych ekranach */
+    height: 100vh;
     top: 0;
     left: 0;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 50px;
+    transform: translateX(-100%); /* Domyślnie ukryte */
+    -webkit-transform: translateX(-100%);
+    transition: transform 0.3s ease-out; /* Płynne wysuwanie */
+    -webkit-transition: transform 0.3s ease-out;
+}
+
+.main-menu.open {
+    transform: translateX(0%); /* Pokazane */
+    -webkit-transform: translateX(0%);
+    width: 40%; /* Szerokość po otwarciu na desktopie */
+}
+
+/* Animacja linków przy chowaniu menu */
+.main-menu.open.main-menu-gone .main-menu-wrap .main-menu-links {
+    left: -500px;
+    -webkit-transition: left 0.4s ease-out;
+    transition: left 0.4s ease-out;
+}
+
+.main-menu .menu-main-container {
+    margin-bottom: 150px;
+}
+
+.main-menu .main-menu-wrap {
     width: 100%;
-    height: 100%;
-    background-image: url("/static/img/karma-kagyu-wirowka.png");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    opacity: 0.1; /* Przezroczystość */
-    z-index: -1; /* Tło pod wszystkimi elementami */
-}
-
-/* Zapewniamy, że elementy treści są widoczne nad tłem i mają własne tło, jeśli potrzebne */
-header, footer, .center-name-section, .hero-section, main {
-    position: relative;
-    z-index: 1; /* Upewnia się, że te elementy są nad tłem body::before */
-}
-
-/* Jawne tła dla głównych sekcji, aby zakryć globalny obraz tła body::before */
-header, .navbar, .main-content {
-    background-color: #ffffff; /* Białe tło dla głównych sekcji */
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: #4a4a4a;
-}
-
-.container {
-    max-width: 1200px;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   2. STYLE NAGŁÓWKA I NAWIGACJI
-/----------------------------------------------------------------------------------
-*/
-header {
-    margin-bottom: 20px;
-    z-index: 10; /* Wyższy z-index, aby nagłówek był zawsze na wierzchu */
-}
-
-/* Kontener nagłówka z obrazem tła */
-.header-with-background {
-    background-size: cover; /* Obraz pokrywa cały element */
-    background-position: center center; /* Obraz wyśrodkowany */
-    background-repeat: no-repeat; /* Obraz się nie powtarza */
-    min-height: 250px; /* Minimalna wysokość nagłówka dla widoczności tła */
-    
+    height: 100vh;
+    z-index: 3;
+    display: -webkit-flex;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Rozkłada elementy (navbar, center-name-section) pionowo */
-} 
-
-.navbar {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    box-shadow: none !important; /* Usunięto cień z paska nawigacyjnego */
-    background-color: transparent !important; /* Tło w pełni przezroczyste, aby widoczne było tło headera */
-    z-index: 10; /* Upewnia się, że menu jest nad innymi elementami w headerze */
-}
-
-.navbar .container-fluid {
-    flex-wrap: wrap;
-    justify-content: space-between;
+    -webkit-align-items: center;
     align-items: center;
+    padding: 100px 0;
 }
 
-.navbar-toggler {
-    order: 1;
-    margin-right: auto;
-    border: none;
-}
-
-.navbar-brand {
-    padding: 0;
-    margin-left: auto;
-    order: 2;
-}
-
-@media (min-width: 992px) {
-    .navbar-brand {
-        margin-left: auto;
-        order: last;
-    }
-    .navbar-toggler {
-        display: none;
-    }
-    .navbar-collapse {
-        order: 0;
-    }
-}
-
-.navbar-nav .nav-link {
-    color: #ffffff; /* Zmieniono kolor domyślny linków na biały */
-    font-weight: 600;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out; /* Dodano transition dla text-shadow */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7); /* Dodano cień dla lepszej czytelności */
-}
-/* Jeśli tło headera jest ciemne, rozważ zmianę koloru linków na biały dla lepszej czytelności */
-/*
-.header-with-background .navbar-nav .nav-link {
-    color: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-}
-*/
-
-.navbar-nav .nav-link:hover {
-    color: #d7073a; /* Kolor czerwony po najechaniu (dla kontrastu z białym) */
-    text-shadow: none; /* Opcjonalnie usuń cień po najechaniu, aby link "wyskoczył" */
-}
-
-.navbar-nav .nav-link.active {
-    color: #d7073a; /* Aktywny link nadal będzie czerwony */
-    font-weight: 700;
-    text-shadow: none; /* Opcjonalnie usuń cień dla aktywnego linku */
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   3. SEKCJA Z NAZWĄ OŚRODKA (Center Name Section)
-/----------------------------------------------------------------------------------
-*/
-.center-name-section {
-    background-color: rgba(0, 0, 0, 0.5) !important; /* Ciemne, półprzezroczyste tło */
-    border: none; /* Usunięto wszystkie obramowania */
-    padding: 20px 0; /* Zwiększony padding dla lepszego wyglądu */
-    box-shadow: none; /* Usunięto cień */
-    z-index: 5;
-    margin-top: auto; /* Wypycha sekcję na dół kontenera flex (header) */
-    color: #ffffff; /* Biały tekst dla lepszej czytelności na ciemnym tle */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Ciekawe cienie dla tekstu */
-}
-
-.center-name-section .container {
-    max-width: 960px;
-}
-
-.center-name-section .center-title {
-    color: #ffffff; /* Upewnia się, że tekst tytułu jest biały */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 2.5rem; /* Większy rozmiar czcionki */
-    margin-bottom: 0;
-    line-height: 1.2;
-}
-
-@media (max-width: 768px) {
-    .center-name-section .center-title {
-        font-size: 1.8rem; /* Mniejszy rozmiar czcionki na mobilnych */
-    }
-    .header-with-background {
-        min-height: 180px; /* Mniejsza minimalna wysokość na urządzeniach mobilnych */
-    }
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   4. SEKCJA HERO (Baner)
-/----------------------------------------------------------------------------------
-*/
-.hero-section {
-    /* Upewnij się, że URL obrazu tła jest dynamicznie dostarczany przez Django w szablonie */
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    padding: 80px 0;
-    margin-bottom: 40px;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #333; /* Fallback kolor tła */
-}
-
-.hero-section h1 {
-    font-size: 3.8rem;
-    margin-bottom: 25px;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-    line-height: 1.2;
-}
-
-.hero-section .lead {
-    font-size: 1.35rem;
-    margin-bottom: 40px;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   5. TREŚĆ GŁÓWNA (Main Content)
-/----------------------------------------------------------------------------------
-*/
-main {
-    padding-top: 20px;
-    padding-bottom: 40px;
-    flex-grow: 1; /* Pozwala main na rozciąganie się i wypełnianie dostępnej przestrzeni */
-    min-height: 100vh; /* Upewnia się, że zawartość główna jest wystarczająco wysoka */
-    overflow: visible;
-}
-
-.main-content {
-    padding-top: 20px;
-    padding-bottom: 40px;
-    flex-grow: 1;
-}
-
-/* Upewnienie się, że .row i .col-md-3 nie blokują sticky elementów */
-.row, .col-md-3 {
-    overflow: visible !important;
-}
-
-/* Style dla treści z TinyMCE (page-content, article-content) */
-.page-content p, .article-content p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-    color: #444;
-}
-
-.page-content img, .article-content img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1.5rem auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   6. KARTY (Articles, News, etc.)
-/----------------------------------------------------------------------------------
-*/
-.card {
-    border: 1px solid #e0e0e0;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-}
-
-.card-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-}
-
-.card-title a {
-    color: #333;
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
-}
-
-.card-title a:hover {
-    color: #d7073a;
-    text-decoration: none;
-}
-
-.card-text small {
-    color: #888;
-    font-size: 0.85rem;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-.card-text {
-    font-size: 1rem;
-    color: #444;
-}
-
-.card .img-fluid.rounded-start {
+.main-menu .main-menu-wrap .main-menu-links {
+    -webkit-transition: left 0.4s ease-out 0.2s;
+    transition: left 0.4s ease-out 0.2s;
+    position: relative;
     height: 100%;
-    object-fit: cover;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    min-width: 190px;
+    margin-left: 200px;
+    display: inline-block;
+    vertical-align: top;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    left: 0;
 }
 
-@media (max-width: 767.98px) {
-    .card .img-fluid.rounded-start {
-        border-top-right-radius: 0.75rem;
-        border-bottom-left-radius: 0;
-    }
-}
-
-.card .btn-primary {
-    background-color: #d7073a;
-    border-color: #d7073a;
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-}
-
-.card .btn-primary:hover {
-    background-color: #b8062e;
-    border-color: #b8062e;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   7. STYLE DLA PRZYPIĘTYCH ARTYKUŁÓW
-/----------------------------------------------------------------------------------
-*/
-.pinned-article {
-    border: 2px solid #d7073a; /* Czerwona ramka */
-    box-shadow: 0 6px 16px rgba(215, 7, 58, 0.15); /* Cień z akcentem */
-    background-color: #fffaf0; /* Lekko inny kolor tła */
-    position: relative; /* Ważne dla np. etykiety "Przypięte" */
-}
-
-/* Opcjonalnie: Etykieta "Przypięte" */
-.pinned-article .badge.bg-primary {
-    background-color: #d7073a !important; /* Spójny kolor z motywem */
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    font-size: 0.8em;
-    border-radius: 5px;
-    z-index: 2; /* Upewnij się, że jest nad innymi elementami karty */
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   8. SIDEBAR (Archiwum / Spis Treści)
-/----------------------------------------------------------------------------------
-*/
-
-/* Karta w sidebarze (dotyczy zarówno Archiwum, jak i Spisu Treści) */
-.col-md-3 .card {
-    background-color: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border-radius: 0.75rem;
-    padding: 15px;
-    /* Usunięto 'position: static !important;' - nie jest konieczne, jeśli '.card' nie ma globalnego 'position: relative' */
-}
-
-.col-md-3 .card-body {
+.main-menu .main-menu-wrap #menu-main {
+    margin: 0;
     padding: 0;
-}
-
-/* Tytuły w sidebarze (np. "Archiwum", "Spis Treści") */
-.col-md-3 .card-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: #4a4a4a;
-    margin-bottom: 1rem;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #d7073a;
-}
-
-/* Lista lat i miesięcy w sidebarze (Archiwum) */
-.col-md-3 .list-unstyled {
     list-style: none;
+}
+
+.main-menu .main-menu-wrap #menu-main li {
     padding: 0;
+    line-height: 100%;
 }
 
-.col-md-3 .list-unstyled li {
-    margin-bottom: 5px;
-}
-
-.col-md-3 .list-unstyled a {
-    color: #555;
+.main-menu .main-menu-wrap #menu-main li a {
+    font-size: 1.765rem;
+    line-height: 100%;
+    text-transform: capitalize;
+    font-family: "Playfair Display";
+    color: #1a1a1a;
     text-decoration: none;
-    padding: 3px 0;
-    display: block;
-    transition: color 0.2s ease-in-out;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    opacity: 1;
+    -webkit-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
 
-.col-md-3 .list-unstyled a:hover {
-    color: #d7073a;
-    text-decoration: none;
+.main-menu .main-menu-wrap #menu-main li a.opac {
+    opacity: 0.2;
+    -webkit-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
 
-/* Style dla aktywnego roku/miesiąca */
-.col-md-3 .list-unstyled a.fw-bold {
-    color: #d7073a !important;
-    font-weight: 700;
+.main-menu .main-menu-wrap #menu-main li a:hover {
+    opacity: 1;
+    -webkit-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
 
-/* Lista miesięcy pod rokiem */
-.col-md-3 .list-unstyled .ms-3 {
-    margin-top: 5px;
-    margin-bottom: 5px;
+.main-menu .main-menu-wrap #menu-main li + li {
+    margin-top: 30px;
 }
 
-/*
-/----------------------------------------------------------------------------------
-/   9. SPIS TREŚCI (Table of Contents)
-/----------------------------------------------------------------------------------
-*/
-
-/* Ogólne style dla linków w spisie treści (zarówno desktop, jak i mobile) */
-#table-of-contents-desktop .nav-link,
-#table-of-contents-mobile .nav-link {
-    color: #4a4a4a;
-    padding: 6px 0;
-    font-size: 0.95rem;
-    transition: all 0.2s ease-in-out;
-    text-decoration: none;
+.main-menu .main-menu-wrap .extra-menu-links {
+    position: absolute;
+    left: 0;
+    bottom: 110px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
-#table-of-contents-desktop .nav-link:hover,
-#table-of-contents-mobile .nav-link:hover {
-    color: #d7073a;
-    background-color: transparent;
+.main-menu .main-menu-wrap .extra-menu-links li {
+    line-height: 100%;
+    font-size: 11px;
 }
 
-/* Styl dla aktywnego linku - użyjmy koloru akcentu */
-#table-of-contents-desktop .nav-link.active-toc-link,
-#table-of-contents-mobile .nav-link.active-toc-link {
-    color: #d7073a;
-    font-weight: 700;
-    border-left: 3px solid #d7073a;
-    padding-left: 7px;
-    background-color: transparent;
-}
-
-/* Styl dla spisu treści na desktopie (lewa strona) */
-#table-of-contents-desktop {
-    padding: 10px 0;
-}
-
-/* --- Styl dla spisu treści na urządzeniach mobilnych (Accordion/Collapse) --- */
-/* Kontener Collapse (gdzie jest ukryte menu mobilne) */
-#table-of-contents-mobile-collapse {
-    border-top: 1px dashed #e0e0e0;
-    padding-top: 10px;
-    margin-top: 10px;
-}
-
-#table-of-contents-mobile .nav-link {
-    padding: 10px 5px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-#table-of-contents-mobile .nav-link:last-child {
-    border-bottom: none;
-}
-
-#table-of-contents-mobile .nav-link:hover {
-    background-color: rgba(215, 7, 58, 0.05);
-    color: #d7073a;
-}
-
-#table-of-contents-mobile .nav-link.active-toc-link {
-    background-color: rgba(215, 7, 58, 0.1);
-}
-
-/* Przycisk mobilnego spisu treści */
-.card.d-md-none .btn-outline-secondary {
-    border-color: #d7073a;
-    color: #d7073a;
+.main-menu .main-menu-wrap .extra-menu-links li a {
+    font-family: "Proxima Nova W15", sans-serif; /* Dodana fallback czcionka */
+    letter-spacing: 4px;
+    text-transform: uppercase;
     font-weight: 600;
-    transition: all 0.2s ease-in-out;
-}
-.card.d-md-none .btn-outline-secondary:hover {
-    background-color: #d7073a;
-    color: #fff;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   10. POWRÓT NA GÓRĘ (Back-to-Top Button)
-/----------------------------------------------------------------------------------
-*/
-#back-to-top {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    background-color: #d7073a;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    font-size: 3rem;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border-radius: 0.5rem;
-}
-
-#back-to-top:hover {
-    background-color: #b8062e;
-    transform: translateY(-2px);
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   11. STOPKA (Footer)
-/----------------------------------------------------------------------------------
-*/
-footer {
-    background-color: #212529; /* Ciemne tło stopki, jeśli nie ma go już z Bootstrapa */
-    color: #ffffff;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   12. STYLE LINKÓW W STOPCE
-/----------------------------------------------------------------------------------
-*/
-footer a {
-    color: #ffffff; /* Domyślny kolor linków - biały */
-    text-decoration: none; /* Brak podkreślenia */
-    transition: color 0.3s ease-in-out; /* Płynne przejście koloru */
-}
-
-footer a:hover {
-    color: rgba(255, 255, 255, 0.7); /* Jaśniejszy kolor po najechaniu (lekko przyciemniony biały) */
-    text-decoration: none; /* Upewnij się, że nadal nie ma podkreślenia */
-}
-
-/* Specjalna klasa dla linków generowanych przez TinyMCE */
-.footer-link-hover-dark {
-    color: #ffffff; /* Domyślny kolor - biały */
-    text-decoration: none; /* Brak podkreślenia */
-    transition: color 0.3s ease-in-out; /* Płynne przejście koloru */
-}
-
-.footer-link-hover-dark:hover {
-    color: rgba(255, 255, 255, 0.7); /* Jaśniejszy kolor po najechaniu */
-    text-decoration: none; /* Upewnij się, że nadal nie ma podkreślenia */
-}
-
-/* Przeładowanie stylów dla linków wewnątrz divów z text-white (jeśli istnieją takie divy) */
-footer .text-white a {
-    color: #ffffff;
+    font-size: 0.7647rem;
+    font-size: 11px; /* Duplikacja, można usunąć jeden */
+    color: #1a1a1a;
+    line-height: 100%;
+    font-size: 0.6471rem; /* Duplikacja, można usunąć jeden */
+    display: inline-block;
     text-decoration: none;
 }
 
-footer .text-white a:hover {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   13. PAGINACJA
-/----------------------------------------------------------------------------------
-*/
-.pagination .page-item .page-link {
-    color: #4a4a4a;
-    border: 1px solid #dee2e6;
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-.pagination .page-item .page-link:hover {
-    color: #ffffff;
-    background-color: #d7073a;
-    border-color: #d7073a;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #d7073a;
-    border-color: #d7073a;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.pagination .page-item.active .page-link:focus {
-    box-shadow: 0 0 0 0.25rem rgba(215, 7, 58, 0.25);
-}
-
-.pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-
-nav[aria-label="Page navigation"] {
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-
-/*
-/----------------------------------------------------------------------------------
-/   14. INNE / DODATKOWE STYLE
-/----------------------------------------------------------------------------------
-*/
-
-/* Styl dla "Brak dostępnych aktualności." (dla archive_list i article_list) */
-.lead {
-    font-size: 1.1rem;
-    color: #6c757d;
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f8f9fa;
+.main-menu .main-menu-wrap .extra-menu-links li + li {
     margin-top: 20px;
 }
 
-/* Styl dla paska wyszukiwania w nagłówku */
-.navbar-search-form {
-    flex-grow: 1;
-    margin-left: 1rem;
-    margin-right: 1rem;
+.main-menu .main-menu-wrap .menu-column-one {
+    margin-right: 45px;
 }
 
-@media (max-width: 991.98px) {
-    .navbar-search-form {
-        width: 100%;
-        margin-top: 1rem;
-        order: 3;
+.main-menu .main-menu-wrap .close-menu {
+    font-family: "Proxima Nova W15", sans-serif; /* Dodana fallback czcionka */
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9412rem;
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 4;
+    cursor: pointer; /* Dodany kursor */
+}
+
+/* Animacje otwierania menu i linków */
+.main-menu.open + .close-menu { /* Ten styl raczej nie zadziała, bo close-menu jest wewnątrz main-menu. Pozostawiony, jak w oryginale */
+    width: 40%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 3;
+}
+
+.main-menu #menu-main li,
+.main-menu .extra-menu-links li {
+    left: -60px;
+    -webkit-transition: left 0.4s ease-out 0.4s;
+    transition: left 0.4s ease-out 0.4s;
+    opacity: 0;
+    position: relative;
+}
+
+.main-menu.open #menu-main li {
+    left: 0;
+    -webkit-transition: left 0.4s ease-out 0.3s, opacity 0.4s ease-out;
+    transition: left 0.4s ease-out 0.3s, opacity 0.4s ease-out;
+    opacity: 1;
+}
+
+/* Opóźnienia animacji dla poszczególnych elementów menu */
+.main-menu.open #menu-main li:nth-child(1) {
+    -webkit-transition-delay: 0.25s;
+    transition-delay: 0.25s;
+}
+
+.main-menu.open #menu-main li:nth-child(2) {
+    -webkit-transition-delay: 0.3s;
+    transition-delay: 0.3s;
+}
+
+.main-menu.open #menu-main li:nth-child(3) {
+    -webkit-transition-delay: 0.35s;
+    transition-delay: 0.35s;
+}
+
+.main-menu.open #menu-main li:nth-child(4) {
+    -webkit-transition-delay: 0.4s;
+    transition-delay: 0.4s;
+}
+
+.main-menu.open #menu-main li:nth-child(5) {
+    -webkit-transition-delay: 0.45s;
+    transition-delay: 0.45s;
+}
+
+.main-menu.open #menu-main li:nth-child(6) {
+    -webkit-transition-delay: 0.5s;
+    transition-delay: 0.5s;
+}
+
+.main-menu.open .extra-menu-links li {
+    left: 0;
+    -webkit-transition: left 0.4s ease-out 0.5s, opacity 0.4s ease-out;
+    transition: left 0.4s ease-out 0.5s, opacity 0.4s ease-out;
+    opacity: 1;
+    position: relative;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(1) {
+    -webkit-transition-delay: 0.54s;
+    transition-delay: 0.54s;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(2) {
+    -webkit-transition-delay: 0.58s;
+    transition-delay: 0.58s;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(3) {
+    -webkit-transition-delay: 0.62s;
+    transition-delay: 0.62s;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(4) {
+    -webkit-transition-delay: 0.66s;
+    transition-delay: 0.66s;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(5) {
+    -webkit-transition-delay: 0.7s;
+    transition-delay: 0.7s;
+}
+
+.main-menu.open .extra-menu-links li:nth-child(6) {
+    -webkit-transition-delay: 0.74s;
+    transition-delay: 0.74s;
+}
+
+/* Style dla overlay'a */
+.overlay {
+    visibility: hidden;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-transition: transform 0.3s ease-out, visibility 0s 0.3s, width 0.4s ease-out, z-index 0s ease 0.4s;
+    transition: transform 0.3s ease-out, visibility 0s 0.3s, width 0.4s ease-out, z-index 0s ease 0.4s;
+    position: fixed; /* Dodane, aby overlay był zawsze na wierzchu */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Domyślne tło */
+    z-index: 2; /* Niżej niż menu, ale wyżej niż treść */
+}
+
+
+.overlay.open {
+    visibility: visible;
+    -webkit-transform: translateX(0%);
+    transform: translateX(0%);
+    -webkit-transition: transform 0.3s ease-out, width 0.4s ease-out;
+    transition: transform 0.3s ease-out, width 0.4s ease-out;
+    width: 100%; /* Zapewnienie pełnej szerokości */
+}
+
+/* Domyślny overlay z body:before (raczej niepotrzebny, jeśli używasz div.overlay) */
+body:before {
+    content: "";
+    width: 0;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    opacity: 0;
+    -webkit-transition: opacity 0.4s ease-out, width 0s ease 0.4s;
+    transition: opacity 0.4s ease-out, width 0s ease 0.4s;
+}
+
+body.overlay-open:before {
+    width: 100%;
+    opacity: 1;
+    -webkit-transition: opacity 0.4s ease-out;
+    transition: opacity 0.4s ease-out;
+}
+
+body.overlay-full .overlay {
+    width: 100%;
+}
+
+.overlay-open .services-menu {
+    z-index: 3;
+}
+
+body.overflow-hidden { /* Dodana klasa, aby zapobiec przewijaniu tła */
+    overflow: hidden;
+}
+
+/* Style dla nagłówka strony (header) */
+header {
+    position: fixed;
+    z-index: 6;
+    left: 0;
+    padding: 19px 0 0 50px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between; /* Zmienione na space-between, aby logo było po prawej */
+    justify-content: space-between; /* Zmienione na space-between */
+    top: 50px; /* Zgodnie ze zrzutami i CSS */
+    width: 100%; /* Rozciągnij na całą szerokość */
+    box-sizing: border-box; /* Ważne dla paddingu */
+}
+
+header .burger-wrap {
+    position: relative;
+    /* margin-right: auto; Usunięte, aby space-between działało */
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between; /* To jest dla wewnętrznej struktury burgera, może nie być potrzebne */
+    justify-content: space-between;
+}
+
+header .burger-wrap.black .burger span {
+    background: #1a1a1a;
+}
+
+header .burger-wrap .burger {
+    width: 28px;
+    height: 16px;
+    position: relative;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+header .burger-wrap .burger span {
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: #000;
+    border-radius: 9px;
+    opacity: 1;
+    left: 0;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: top 0.25s ease-in-out, width 0.25s ease-in-out, left 0.25s ease-in-out, transform 0.25s ease-in-out, background 0s ease-in-out;
+    transition: top 0.25s ease-in-out, width 0.25s ease-in-out, left 0.25s ease-in-out, transform 0.25s ease-in-out, background 0s ease-in-out;
+}
+
+header .burger-wrap .burger span:nth-child(1) {
+    top: 0;
+}
+
+header .burger-wrap .burger span:nth-child(2),
+header .burger-wrap .burger span:nth-child(3) {
+    top: 8px;
+}
+
+header .burger-wrap .burger span:nth-child(4) {
+    top: 16px;
+}
+
+header .burger-wrap .burger.open span {
+    background: #1a1a1a; /* Kolor zmieniony na czarny, aby był widoczny na białym tle */
+}
+
+header .burger-wrap .burger.open span:nth-child(1) {
+    top: 18px;
+    width: 0;
+    left: 50%;
+    background: #1a1a1a; /* Zmieniony z białego na czarny */
+    -webkit-transition: all 0.1s ease-out;
+    transition: all 0.1s ease-out;
+}
+
+header .burger-wrap .burger.open span:nth-child(2) {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+header .burger-wrap .burger.open span:nth-child(3) {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+header .burger-wrap .burger.open span:nth-child(4) {
+    top: 18px;
+    width: 0;
+    left: 50%;
+    background: #1a1a1a; /* Zmieniony z białego na czarny */
+    -webkit-transition: all 0.1s ease-out;
+    transition: all 0.1s ease-out;
+}
+
+header .main-menu-gone.main-menu.open #menu-main li,
+header .main-menu-gone.main-menu.open .extra-menu-links li {
+    left: -90px;
+}
+
+/* Media Queries dla nagłówka i menu */
+@media (max-width: 1024px) {
+    header {
+        padding: 19px 30px 30px 30px;
     }
+
+    .main-menu {
+        padding: 0 85px;
+    }
+
+    .main-menu .main-menu-wrap .main-menu-links {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 767px) {
+    p {
+        font-size: 1.1em;
+        line-height: 1.8em;
+    }
+
+    header {
+        padding: 0;
+        background: rgba(255, 255, 255, 0.9);
+        width: 71px; /* Domyślna szerokość nagłówka na mobilnych */
+        border: 1px solid rgba(204, 204, 204, 0.38);
+        margin-left: 3px;
+        border-top: none;
+        top: 18px; /* Przesunięcie w dół zgodnie ze zrzutem */
+        left: 0;
+        right: auto; /* Zapewnienie, że jest po lewej */
+        display: block; /* Upewnienie się, że logo nie będzie obok burgera, chyba że to cel */
+    }
+
+    header .navbar-brand { /* Styl dla logo w headerze, aby dopasować do mobilnej wersji */
+        position: absolute;
+        right: 15px; /* Dopasuj do prawej krawędzi */
+        top: 26px; /* Dopasuj do wysokości */
+        margin: 0;
+    }
+
+    header .burger-wrap .burger.open span {
+        -webkit-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+    }
+
+    .overlay-open header {
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .main-menu.open {
+        width: 80%; /* Szerokość menu na mobilnych */
+    }
+
+    header .burger-wrap .burger {
+        padding: 26px 35px; /* Większy obszar klikalny na mobilnych */
+        width: auto; /* Zresetuj szerokość, bo padding ją ustawi */
+        height: auto;
+    }
+
+    header .burger-wrap .burger span {
+        width: 28px;
+        left: 20px;
+    }
+
+    header .burger-wrap .burger span:nth-child(1) {
+        top: 17px;
+    }
+
+    header .burger-wrap .burger span:nth-child(2),
+    header .burger-wrap .burger span:nth-child(3) {
+        top: 25px;
+    }
+
+    header .burger-wrap .burger span:nth-child(4) {
+        top: 33px;
+    }
+
+    header .burger-wrap .burger.open span:nth-child(4) {
+        top: 35px;
+    }
+
+    body.overlay-full .overlay {
+        width: 100%;
+    }
+
+    body.overlay-full .overlay .main-menu-wrap .main-menu-links {
+        opacity: 0; /* Ten styl może być problematyczny, bo ukryje menu po otwarciu overlay-full */
+        -webkit-transition: opacity 0.4s ease-out;
+        transition: opacity 0.4s ease-out;
+    }
+
+    body.overlay-full header .burger-wrap .burger.open span {
+        -webkit-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+    }
+
+    body.overlay-full header .burger-wrap .burger.open span:nth-child(2) {
+        top: 32px;
+        width: 17px;
+    }
+
+    body.overlay-full header .burger-wrap .burger.open span:nth-child(3) {
+        top: 21px;
+        width: 17px;
+    }
+
+    body.overlay-open .main-menu-wrap .main-menu-links {
+        margin-left: 0;
+    }
+
+    body.overlay-open.overlay-full .services-menu {
+        z-index: 3;
+    }
+
+    .main-menu {
+        padding: 0 65px;
+    }
+
+    .main-menu .main-menu-wrap {
+        padding: 50px 0 50px;
+    }
+    
+    /* Ukrycie domyślnego nagłówka centrum nazwy na mobilnych, jeśli nie jest potrzebny */
+    .center-name-section {
+        display: none;
+    }
+
+    #line-header { /* Dostosowanie linii na mobilne */
+        display: none; /* Domyślnie ukryj na mobilnych, jeśli burger/logo są wystarczające */
+    }
+}
+
+@media (max-width: 736px) {
+    .body {
+        padding-bottom: 44px !important;
+    }
+}
+
+/* Główne style dla body i typografii */
+body {
+    margin: 0;
+    padding: 0;
+    /* flex-direction: column; Usunięte, bo koliduje z ogólnym layoutem */
+    /* align-items: center; Usunięte, bo koliduje z ogólnym layoutem */
+    /* display: flex; Usunięte, bo koliduje z ogólnym layoutem */
+    font-family: "Montserrat", sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+h1 {
+    font-weight: 100;
+    font-size: 1.9em;
+    font-family: "Playfair Display", serif; /* Dodana fallback czcionka */
+    color: black;
+    line-height: 1.6em;
+}
+
+h2 {
+    font-weight: 100;
+    font-size: 1.5em;
+    font-family: "Playfair Display", serif;
+    color: black;
+    line-height: 1.6em;
+}
+
+h3 {
+    font-weight: 100;
+    font-size: 1.5em;
+    font-family: "Playfair Display", serif;
+    color: black;
+    line-height: 1.6em;
+}
+
+h4 {
+    font-weight: 100;
+    font-size: 1.3em;
+    font-family: "Playfair Display", serif;
+    color: black;
+    line-height: 1.6em;
+}
+
+h5 {
+    font-weight: 100;
+    font-size: 1.1em;
+    font-family: "Playfair Display", serif;
+    color: black;
+    line-height: 1.6em;
+}
+
+h6 {
+    font-weight: 100;
+    font-size: 0.9em;
+    font-family: "Playfair Display", serif;
+    color: black;
+    line-height: 1.6em;
+}
+
+blockquote {
+    /* border: 1px solid #eee; */
+    /* background: white; */
+    text-shadow: none;
+    margin: 0;
+    padding-left: 3em;
+    padding-top: 0;
+    margin-top: -18px;
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.34em;
+    padding-bottom: 0.5em;
+    line-height: 1.46em;
+}
+
+blockquote .big {
+    font-size: 6em;
+    font-family: "Playfair Display", serif;
+    color: rgba(204, 204, 204, 0.37);
+    margin-left: -46px;
+    padding-right: 10px;
+    margin-top: -25px;
+}
+
+a {
+    text-decoration: none;
+    color: #860000;
+}
+
+.signature {
+    text-align: right;
+    border-top: 1px solid rgba(204, 204, 204, 0.37);
+    font-family: "Playfair Display", serif;
+    text-shadow: none;
+    margin-right: 1em;
+    padding-top: 1.34em;
+    display: block;
+    float: right;
+}
+
+/* Stopka i główny wrapper treści */
+footer,
+.wrapper {
+    color: #0e0e0e;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 140px 86px 140px 86px;
+    font-size: 14px;
+    width: 100%;
+    border-top: 1px solid #eee;
+    background-color: white; /* Upewnij się, że tło jest białe */
+}
+
+footer section,
+.wrapper section {
+    padding: 1em;
+    max-width: 924px; /* Ograniczenie szerokości treści */
+    width: 100%; /* Upewnienie się, że sekcja zajmuje całą dostępną szerokość do max-width */
+}
+
+footer section .content,
+.wrapper section .content {
+    line-height: 1.371rem;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+footer section .content .column1,
+footer section .content .column2,
+.wrapper section .content .column1,
+.wrapper section .content .column2 {
+    flex: 1;
+}
+
+footer section .content .column1,
+.wrapper section .content .column1 {
+    padding-right: 15px;
+}
+
+footer section .content .column2,
+.wrapper section .content .column2 {
+    padding-left: 15px;
+}
+
+footer {
+    padding: 1em 0;
+    font-size: 0.9em;
+    line-height: 1.6em;
+    border: none;
+    text-align: center;
+    background-color: #f9f9f9; /* Jasnoszare tło stopki, jak na zrzucie */
+}
+
+footer .footer-content { /* Stylowanie kontenera w stopce, aby pasował do wzorca wrapper */
+    max-width: 924px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+footer .footer-content p,
+footer .footer-content a {
+    color: #0e0e0e; /* Kolor tekstu i linków w stopce */
+}
+
+footer .footer-content a:hover {
+    color: #c1272d; /* Kolor linków w stopce po najechaniu */
+}
+
+footer .list-unstyled a {
+    text-decoration: none; /* Usuń podkreślenia z linków w stopce */
+}
+
+/* Style dla sekcji */
+#about {
+    border-top: none;
+}
+
+#buddyzm,
+#kontakt {
+    background: #f9f9f9;
+}
+
+/* Linia nagłówka z logiem Karma Kagyu */
+#line-header {
+    display: flex;
+    position: absolute;
+    vertical-align: middle;
+    align-items: center;
+    height: 98px; /* Wysokość kontenera */
+    opacity: 0.95;
+    margin-top: 54px; /* Odsunięcie od góry, aby był pod głównym headerem */
+    width: 100vw;
+    z-index: 5; /* Poniżej głównego headera, ale nad treścią */
+}
+
+#line-header .line {
+    height: 1px;
+    background: repeat-x scroll 0 1px #b4283a;
+}
+
+#line-header #line-left {
+    flex: 1;
+}
+
+#line-header #logo {
+    flex: 0 0 165px;
+    height: 49px;
+    margin-top: -28px; /* Przesunięcie logo w górę względem linii */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#line-header #logo img {
+    width: 280px;
+    margin-left: -80px;
+    margin-right: 5px;
+    margin-top: -5px;
+    max-width: inherit;
+    height: auto;
+}
+
+#line-header #line-right {
+    width: 7%;
+}
+
+/* Media Queries dla wrappera i linii nagłówka */
+@media (max-width: 1024px) {
+    .wrapper {
+        padding: 80px 50px 80px 50px;
+    }
+}
+
+@media (max-width: 767px) {
+    #about {
+        padding-top: 100px;
+    }
+
+    .wrapper {
+        padding: 30px 10px 20px 10px;
+    }
+
+    .wrapper section .content {
+        flex-direction: column;
+    }
+
+    .wrapper section .content .column1,
+    .wrapper section .content .column2 {
+        padding: 0;
+    }
+
+    #line-header #logo img {
+        z-index: 10;
+        width: 244px;
+        margin-left: -71px;
+        margin-right: 5px;
+        margin-top: 2px;
+    }
+}
+
+/* Carousel (Owl Carousel) */
+.owl-carousel {
+    width: 90vw;
+    overflow: hidden;
+}
+
+.slide .content h3 {
+    margin: 0;
+}
+
+.slide .content {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease-in;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1em;
+    width: 100%;
+    height: 100%;
+    line-height: 1.36em !important;
+}
+
+.slide:hover .content {
+    visibility: visible;
+    opacity: 1;
+}
+
+.slide {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    float: left;
+    margin: 0.5em;
+    width: 187px;
+    font-size: 0.9em;
+    height: 253px;
+    margin-right: 5px;
+    border: 1px solid rgba(104, 104, 104, 0.238);
+}
+
+.map {
+    display: block;
+    float: none;
+    margin: 0.5em;
+    width: 280px;
+    height: 200px;
+}
+
+.map .wrapper {
+    background-size: 280px 200px !important;
+}
+
+.slide .wrapper {
+    background-position: center;
+    background-size: cover;
+    width: 102%;
+    border: none;
+    height: 102%;
+    background-color: transparent;
+    transition: all 0.43s;
+}
+
+.slide .dimmer,
+.slide .dimmer:visited {
+    height: 102%;
+    width: 102%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    opacity: 0;
+    top: 0;
+    font-family: "Playfair Display", serif;
+    background-color: rgba(255, 255, 255, 0.8);
+    -webkit-transition: opacity 0.241s ease-in;
+    transition: opacity 0.241s ease-in;
+    color: black;
+    padding: 1em;
+    font-size: 0.92em;
+}
+
+.slide a {
+    cursor: pointer;
+}
+
+.slide p {
+    line-height: 1.5em;
+}
+
+.slide h3 {
+    margin: 0;
+    padding-top: 0.5em;
+}
+
+.slide:hover .wrapper,
+.slide:focus .wrapper {
+    transform: scale(1.1);
+}
+
+.slide:hover .dimmer,
+.slide:focus .dimmer {
+    opacity: 1;
+}
+
+#slide2 .wrapper {
+    background-position: -185px -1px;
+}
+
+#slide3 .wrapper {
+    background-position: -375px -1px;
+}
+
+#slide4 .wrapper {
+    background-position: -561px -1px;
+}
+
+@media (max-width: 936px) {
+    .slide {
+        /* display: none; */ /* Zakomentowane, abyś mógł zdecydować, czy chcesz ukrywać na tabletach */
+    }
+}
+
+@media (max-width: 600px) {
+    .slide {
+        width: calc(187px * 0.81);
+        height: calc(253px * 0.81);
+        font-size: 0.75em;
+    }
+
+    .map {
+        display: block;
+        float: none;
+        margin: 0.5em;
+        width: 280px;
+        height: 200px;
+    }
+
+    .slide .wrapper {
+        background-size: cover;
+    }
+
+    #slide2 .wrapper {
+        background-position: -155px;
+    }
+
+    #slide3 .wrapper {
+        background-position: -307px;
+    }
+
+    #slide4 .wrapper {
+        background-position: -460px;
+    }
+}
+
+/* Sekcje mapy i wydarzeń */
+.row {
+    width: 100%;
+}
+
+#google-map {
+    height: 410px;
+    position: relative;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.eventrow {
+    font-size: 1.5em;
+}
+
+.eventlist {
+    padding-top: 10px;
+    padding-left: 0;
+    line-height: 2;
+    list-style: none;
+}
+
+.event-container {
+    padding-top: 80px;
+    max-width: 34em;
+    margin: 0 auto; /* Wyśrodkowanie kontenera wydarzeń */
+}
+
+@media (max-width: 600px) {
+    .event-container {
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+}
+
+.event-map {
+    margin: auto;
+}
+
+.location {
+    text-align: center;
+    font-size: 12px;
+}
+
+.event-time {
+    color: dimgray;
+    margin-top: -20px;
+}
+
+/* Formularz MailChimp */
+#mc_embed_signup form {
+    padding: 0 !important;
+    margin-top: 16px !important;
+}
+
+#mc_embed_signup .button {
+    background: white !important;
+    border-radius: 0px !important;
+    color: black !important;
+    border: 1px solid #999 !important;
+    font-family: "Playfair Display", serif;
+    display: block !important;
+    font-weight: bold !important;
+    padding: 2px 2em !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 0 10px 0;
+    min-width: 90px;
+    font-size: 16px !important;
+    cursor: pointer; /* Dodany kursor */
+}
+
+#mc_embed_signup .clear {
+    float: left;
+}
+
+#mc_embed_signup input.email {
+    float: left !important;
+    border-radius: 0px !important;
+    padding: 10px !important;
+    margin-right: 11px !important;
+    min-width: 284px !important;
+    color: #850000 !important;
+}
+
+/* Inne elementy */
+.portion {
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    width: 100%;
+    height: 350px;
+}
+
+.column1 img {
+    float: left;
+    margin-bottom: 15px;
+}
+
+.clear {
+    clear: both;
+}
+
+#percent {
+    max-width: 400px !important;
+}
+
+@media (max-width: 400px) {
+    #percent {
+        max-width: 270px !important;
+    }
+}
+
+.poster img {
+    max-width: 100%;
+}
+
+/* workaround for fixed events image size */
+body > div.event-container > div > main > div > div > img {
+    height: auto !important;
+}
+
+#about .NearestEvent {
+    display: none;
+}
+
+.NearestEvent {
+    border-bottom: #ddd 1px solid;
+    width: 100%;
+    transition: all 200ms ease-in;
+}
+
+.NearestEvent .title {
+    line-height: 1.4em;
+}
+
+#about .NearestEvent:nth-child(1) {
+    display: block;
+}
+
+@media (min-width: 1025px) {
+    .NearestEvent {
+        margin-top: -47px;
+        padding-bottom: 41px !important;
+        margin-bottom: 28px;
+    }
+}
+
+.festive-banner {
+    width: 800px;
+    max-width: 90vw;
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+}
+
+.festive-banner:hover {
+    transform: scale(1.02);
+}
+
+@media (max-width: 800px) {
+    .festive-banner {
+        margin-top: 20px;
+    }
+}
+
+/* Baner górny (czerwony) */
+#baner {
+    display: flex;
+    width: 100vw;
+    background: #df4747;
+    position: fixed;
+    top: 0;
+    left: 0; /* Dodane, aby baner zaczynał się od lewej krawędzi */
+    z-index: 1; /* Zmienione na niższy, aby nie kolidował z headerem i menu */
+    height: 124px;
+    font-size: 30px;
+    box-shadow: 8px 0px 8px 2px rgb(0 0 0 / 20%);
+    font-weight: 500;
+    align-items: center; /* Wyśrodkowanie w pionie */
+    justify-content: center; /* Wyśrodkowanie w poziomie */
+}
+
+#baner > div {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#baner > div > a {
+    font-family: "Playfair Display", serif;
+    color: white;
+    text-decoration: none; /* Upewnij się, że link nie jest podkreślony */
+}
+
+#baner > div > a > span {
+    color: #ffbf00;
+    padding-left: 30px;
+}
+
+#baner > div > a > i {
+    padding-right: 30px;
+}
+
+@media (max-width: 1025px) {
+    #baner {
+        font-size: 19px;
+        padding-top: 11px;
+    }
+
+    #baner > div > a > span {
+        padding-left: 5px;
+    }
+
+    #baner > div > a > i {
+        padding-right: 5px;
+    }
+}
+
+/* Dodatkowe style dla Bootstrapa, aby współgrał z nowym CSS */
+.navbar-brand img { /* Styl dla logo w headerze */
+    max-height: 60px; /* Ogranicz wysokość, jeśli jest inna */
+    width: auto;
+}
+
+/* Specyficzne dla strony głównej, jeśli background-image jest używany w headerze */
+.header-with-background {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 300px; /* Przykład, dostosuj wysokość nagłówka z tłem */
+    position: relative;
+    z-index: 0; /* Upewnij się, że tło jest za burgerem i logo */
+}
+
+.center-name-section {
+    background-color: transparent; /* Upewnij się, że nie ma tła */
+    padding-top: 150px !important; /* Przesuń nazwę ośrodka w dół, aby nie kolidowała z fixed headerem */
+    position: relative;
+    z-index: 0;
+    width: 100%;
+}
+
+.center-title {
+    color: #1a1a1a; /* Kolor nazwy ośrodka */
+    font-family: "Playfair Display", serif;
+    font-weight: bold; /* Ustawienie grubości czcionki */
+}
+
+/* Klasy dla paginacji Bootstrapa */
+.pagination {
+    margin-top: 20px;
+}
+.page-item .page-link {
+    color: #860000; /* Kolor linków paginacji */
+}
+.page-item.active .page-link {
+    background-color: #860000;
+    border-color: #860000;
+    color: white;
+}
+.page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+/* Style dla kart aktualności na stronie głównej */
+.card {
+    border: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.card-title a {
+    color: #1a1a1a; /* Kolor tytułu artykułu */
+}
+.card-title a:hover {
+    color: #c1272d;
+}
+.btn-primary {
+    background-color: #860000;
+    border-color: #860000;
+}
+.btn-primary:hover {
+    background-color: #c1272d;
+    border-color: #c1272d;
+}
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Sidebar (archiwum, nasze strony) */
+.list-unstyled a {
+    color: #1a1a1a; /* Kolor linków w sidebarze */
+}
+.list-unstyled a:hover {
+    color: #c1272d;
+}
+.list-unstyled a.fw-bold.text-success { /* Aktywne linki w archiwum */
+    color: #860000 !important; /* Upewnij się, że aktywny kolor jest czytelny */
 }
