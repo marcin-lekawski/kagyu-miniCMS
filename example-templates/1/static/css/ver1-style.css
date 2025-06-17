@@ -1,0 +1,190 @@
+/*
+/----------------------------------------------------------------------------------
+/   Koncepcja 3 (POPRAWIONA): Akcent Kolorystyczny i Dynamiczny Nagłówek
+/   Gradient jako pseudo-element, obraz tła z HTML.
+/----------------------------------------------------------------------------------
+*/
+header {
+    margin-bottom: 20px;
+    z-index: 10;
+    position: relative; /* Potrzebne dla z-index */
+    overflow: hidden; /* Upewnia się, że nic nie "wyjdzie" */
+}
+
+.header-with-background {
+    background-size: cover; /* Obraz tła z HTML */
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 280px; /* Minimalna wysokość nagłówka */
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Elementy będą "przyklejone" do dolnej części nagłówka */
+    align-items: center; /* Wyśrodkowanie horyzontalne dla flex-container */
+    padding-bottom: 0;
+    position: relative; /* Kluczowe dla pozycjonowania pseudo-elementu ::before */
+} 
+
+/* DEDYKOWANY PSEUDO-ELEMENT Z GRADIENTEM, BĘDZIE NAD OBRAZEM TŁA */
+.header-with-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Gradient, który chcesz rozszerzyć na cały nagłówek */
+    background: linear-gradient(to right, rgba(215, 7, 58, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%); 
+    z-index: 1; /* NAJNIŻSZY Z-INDEX - NAD OBRAZEM, POD TREŚCIĄ */
+}
+
+/* Sekcja z nazwą ośrodka - musi być nad pseudo-elementem */
+.center-name-section {
+    width: 100%;
+    background-color: transparent !important; /* Przezroczyste, aby widzieć gradient z ::before */
+    border: none;
+    padding: 15px 0;
+    box-shadow: none;
+    z-index: 2; /* Wyższy niż ::before */
+    color: #ffffff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    position: relative; /* Potrzebne, aby z-index działał */
+}
+
+.center-name-section .center-title {
+    color: #ffd700;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin-bottom: 0;
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(215, 7, 58, 0.8);
+}
+
+/* Pasek nawigacyjny - musi być nad pseudo-elementem */
+.navbar {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+    background-color: transparent !important; /* Przezroczyste, aby widzieć gradient z ::before */
+    z-index: 3; /* Najwyższy z-index - nad ::before i nazwą ośrodka */
+    margin-top: 0; 
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative; /* Potrzebne, aby z-index działał */
+}
+
+.navbar .container-fluid {
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+/* Logo w nawigacji (bez zmian) */
+.navbar-brand img {
+    filter: drop-shadow(0px 0px 8px rgba(255,215,0,0.7));
+}
+
+/* Przyciski hamburgera na mobilnych (bez zmian) */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Linki nawigacyjne (bez zmian) */
+.navbar-nav .nav-link {
+    color: #ffffff;
+    font-weight: 600;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    transition: all 0.3s ease-in-out;
+    text-shadow: 1px 1px 3px rgba(0,0,0,1);
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffd700;
+    text-shadow: none;
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+    color: #d7073a;
+    font-weight: 700;
+    text-shadow: none;
+    border-bottom: 2px solid #d7073a;
+    padding-bottom: 8px;
+}
+
+/* Media Queries dla responsywności (bez zmian) */
+@media (max-width: 991.98px) {
+    .header-with-background {
+        min-height: 220px;
+    }
+    .center-name-section .center-title {
+        font-size: 2rem;
+    }
+    .navbar .container-fluid {
+        justify-content: space-between;
+    }
+    .navbar-collapse {
+        background: rgba(0, 0, 0, 0.9);
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .navbar-nav {
+        width: 100%;
+        text-align: center;
+    }
+    .navbar-nav .nav-item {
+        margin-bottom: 5px;
+    }
+    .navbar-nav .nav-link.active {
+        border-bottom: none;
+    }
+}
+@media (max-width: 767.98px) {
+    .header-with-background {
+        min-height: 180px;
+    }
+    .center-name-section .center-title {
+        font-size: 1.5rem;
+        padding: 10px 0;
+    }
+}
+
+/* Stopka dla Koncepcji 3 (bez zmian) */
+footer {
+    background-color: #0d0d0d;
+    color: #ffffff;
+    padding: 30px 0;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    text-align: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+    border-top: 3px solid #d7073a;
+}
+
+footer a {
+    color: #ffd700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #d7073a;
+}
+
+.social-icons a {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #ffd700;
+}
