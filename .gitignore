@@ -11,6 +11,7 @@ venv/
 db.sqlite3
 #/static/
 #/media/
+/staticfiles/ 
 
 # VS Code (jeśli używasz)
 .vscode/
