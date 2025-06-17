@@ -1,0 +1,73 @@
+{# templates/news/article_list.html #}
+{% extends 'base.html' %}
+{% load news_filters %}
+
+{% block title %}Aktualności - Mini CMS{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {# Główna treść strony z listą artykułów na pełną szerokość #}
+        <div class="col-md-12">
+            <h1 class="mb-4">Aktualności</h1>
+            {% if articles %}
+                {% for article in articles %}
+                    {# Dodano klasę 'pinned-article' i opcjonalną plakietkę #}
+                    <div class="card mb-3 {% if article.is_pinned %}pinned-article{% endif %}"> 
+                        <div class="row g-0">
+                            {% if article.thumbnail %}
+                                <div class="col-md-4">
+                                    <img src="{{ article.thumbnail.url }}" class="img-fluid rounded-start" alt="{{ article.title }}">
+                                </div>
+                            {% endif %}
+                            <div class="{% if article.thumbnail %}col-md-8{% else %}col-md-12{% endif %}">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'news:article_detail' slug=article.slug %}" class="text-decoration-none">{{ article.title }}</a>
+                                        {% if article.is_pinned %}
+                                            <span class="badge bg-primary ms-2">Przypięte</span> {# Plakietka "Przypięte" #}
+                                        {% endif %}
+                                    </h5>
+                                    <p class="card-text"><small class="text-muted">Opublikowano: {{ article.published_date|date:"Y-m-d H:i" }}</small></p>
+                                    <p class="card-text">{{ article.content|striptags|truncatewords:50 }}</p>
+                                    <a href="{% url 'news:article_detail' slug=article.slug %}" class="btn btn-primary btn-sm">Czytaj więcej</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {# Paginacja - zmienna 'articles' jest teraz obiektem Page #}
+                {% if articles.has_other_pages %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if articles.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page={{ articles.previous_page_number }}">Poprzednia</a></li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">Poprzednia</span></li>
+                            {% endif %}
+                            
+                            {% for num in articles.paginator.page_range %}
+                                {% if articles.number == num %}
+                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if articles.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ articles.next_page_number }}">Następna</a></li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">Następna</span></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+
+            {% else %}
+                <p class="lead">Brak dostępnych aktualności.</p>
+            {% endif %}
+        </div>
+
+        {# WAŻNE: Usunięto cały sidebar z archiwum, który był w div.col-md-3 #}
+    </div>
+{% endblock content %}
