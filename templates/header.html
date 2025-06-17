@@ -4,25 +4,15 @@
 {% load news_filters %}
 
 <header>
+    <!-- burger menu i nawigacja-->
     <div class="burger-wrap">
-        <div class="burger">
+        <div class="burger navbar-brand ms-auto order-lg-last">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
+            </a>
         </div>
     </div>
-    {# Logo w headerze zgodnie z CSS, jeśli ma być tam #}
-    {# Zrzuty ekranu sugerują, że logo obok burgera jest inne niż logo w linii.
-       Użyję logo ośrodka tutaj, a logo Karma Kagyu w #line-header.
-       Sprawdź, które logo chcesz w tym miejscu.
-    #}
-    <a class="navbar-brand ms-auto order-lg-last" href="{% url 'home' %}">
-        {% if header_content and header_content.logo %}
-            <img src="{{ header_content.logo.url }}" alt="Logo Ośrodka" height="60">
-        {% else %}
-            {# Placeholder - upewnij się, że masz to logo lub usuń #}
-            <img src="{% static 'img/logo_placeholder.png' %}" alt="Logo" height="60">
-        {% endif %}
-    </a>
+     
 </header>
