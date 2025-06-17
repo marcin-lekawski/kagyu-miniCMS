@@ -7,7 +7,8 @@
     <h1 class="mb-4">Witaj w Twoim Mini CMS!</h1>
 
     <div class="row">
-        <div class="col-md-9">
+        {# Główna treść strony z najnowszymi aktualnościami na pełną szerokość #}
+        <div class="col-md-12">
             <h2 class="mb-3">Najnowsze Aktualności</h2>
             {% if articles %}
                 {% for article in articles %}
@@ -58,49 +59,7 @@
             {% endif %}
         </div>
 
-        <div class="col-md-3"> {# Sidebar na archiwum #}
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Archiwum</h5>
-                    <ul class="list-unstyled">
-                        {% for year in archive_years %}
-                            <li>
-                                <a href="{% url 'news:archive_year' year=year %}"
-                                   class="text-decoration-none {% if year == selected_year and not selected_month %}fw-bold text-success{% endif %}">
-                                    {{ year }}
-                                </a>
-                                <ul class="list-unstyled ms-3">
-                                    {% for month_num in archive_months|get_item:year %}
-                                        <li>
-                                            <a href="{% url 'news:archive_month' year=year month=month_num %}"
-                                               class="text-decoration-none {% if year == selected_year and month_num == selected_month %}fw-bold text-success{% endif %}">
-                                                {{ month_num|month_name }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endfor %}
-                        <li>
-                            <a href="{% url 'news:archive_all' %}"
-                               class="text-decoration-none {% if not selected_year and not selected_month %}fw-bold text-success{% endif %}">
-                                Wszystkie aktualności
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            {# Możesz dodać tutaj sekcję z linkami do stron statycznych, jeśli chcesz obok aktualności #}
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Nasze Strony</h5>
-                    <ul class="list-unstyled">
-                        {% for page in all_pages %}
-                            <li><a href="{% url 'pages:detail' slug=page.slug %}" class="text-decoration-none">{{ page.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+        {# WAŻNE: Usunięto cały sidebar z archiwum, który był w div.col-md-3 #}
+        {# WAŻNE: Usunięto cały sidebar z "Nasze Strony", który był w div.card mt-4 #}
     </div>
 {% endblock content %}
