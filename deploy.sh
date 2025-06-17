@@ -3,6 +3,10 @@
 # Aktywuj środowisko wirtualne Django
 echo "Aktywowanie środowiska wirtualnego..."
 source ~/.virtualenvs/kagyu_env/bin/activate
+if [ $? -ne 0 ]; then
+    echo "BŁĄD: Nie udało się aktywować środowiska wirtualnego. Sprawdź ścieżkę do kagyu_env."
+    exit 1
+fi
 
 # 1. Pobierz najnowsze zmiany z GitHuba
 echo -e "\n--- Pobieranie najnowszych zmian z GitHub ---"
@@ -12,6 +16,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Pobrano zmiany."
+
+# --- DODANY KROK: Instalacja/aktualizacja zależności ---
+echo -e "\n--- Instalacja/aktualizacja zależności z requirements.txt ---"
+pip install -r requirements.txt
+if [ $? -ne 0 ]; then
+    echo "BŁĄD: Instalacja zależności nie powiodła się."
+    exit 1
+fi
+echo "Zależności zainstalowane/zaktualizowane."
+# ----------------------------------------------------
 
 # 2. Zbierz pliki statyczne
 echo -e "\n--- Zbieranie plików statycznych ---"
