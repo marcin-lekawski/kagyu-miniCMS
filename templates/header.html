@@ -4,9 +4,31 @@
 {% load news_filters %}
 
 <header id="main-page-header">
-    {# Czerwony pasek z nazwą ośrodka (pobieraną z bazy danych) #}
-    <div class="top-branding-bar py-2">
-        <div class="container text-center">
+    {# Górny pasek: Burger po lewej, Logo Karma Kagyu po prawej #}
+    {# Używamy klasy Bootstrap container-fluid dla pełnej szerokości i d-flex dla flexboxa #}
+    <div class="main-header-top-bar container-fluid d-flex justify-content-between align-items-center py-2">
+        {# Burger menu po lewej #}
+        <div class="burger-wrap">
+            <div class="burger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+
+        {# Logo Karma Kagyu po prawej #}
+        <a class="logo-link" href="{% url 'home' %}">
+            <img src="{% static 'img/logo_karma_kagyu.png' %}" alt="Logo Karma Kagyu" height="60">
+        </a>
+    </div>
+
+    {# Czerwony pasek podkreślenia - bezpośrednio pod górnym paskiem #}
+    <div class="red-underline-bar"></div>
+
+    {# Sekcja z nazwą ośrodka - poniżej czerwonego paska podkreślenia #}
+    {# Używamy klasy Bootstrap container dla wyśrodkowania i py-2 dla paddingu #}
+    <div class="center-name-section py-2 text-center">
+        <div class="container"> {# Upewniamy się, że nazwa ośrodka jest w kontenerze #}
             <h1 class="center-title mb-0">
                 {% if header_content %}
                     {{ header_content.site_name|safe }} {# Nazwa ośrodka z bazy danych #}
@@ -15,22 +37,5 @@
                 {% endif %}
             </h1>
         </div>
-    </div>
-
-    {# Pasek z ikoną burgera i logo Karma Kagyu - oba po prawej #}
-    <div class="main-header-bar container-fluid d-flex justify-content-end align-items-center py-2">
-        {# Twoja ikona burgera #}
-        <div class="burger-wrap me-3"> {# Dodano margines z prawej #}
-            <div class="burger">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-        </div>
-
-        {# Logo Karma Kagyu (statyczne, zawsze to samo) - po prawej stronie burgera #}
-        <a class="logo-link" href="{% url 'home' %}">
-            <img src="{% static 'img/logo_karma_kagyu.png' %}" alt="Logo Karma Kagyu" height="60">
-        </a>
     </div>
 </header>

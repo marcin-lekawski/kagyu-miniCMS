@@ -11,7 +11,7 @@
 
 * {
     outline: 0;
-    box-sizing: border-box; /* Upewnij się, że padding i border są wliczone w szerokość/wysokość elementu */
+    box-sizing: border-box;
 }
 
 *:before,
@@ -22,59 +22,46 @@
 
 html {
     position: relative;
-    scroll-behavior: smooth; /* Płynne przewijanie do kotwic */
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Montserrat', sans-serif;
-    color: #333; /* Domyślny kolor tekstu na stronie */
+    color: #333;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     /* WAŻNE: padding-top jest ustawiany dynamicznie przez JS, aby uwzględnić wysokość sticky headera. */
-    /* Jeśli JS nie działa, lub do testów, można ustawić tu stałą wartość np. padding-top: 120px; */
-    padding-top: var(--header-height, 120px); /* Domyślna wysokość nagłówka jako fallback */
+    /* Zwiększono domyślny fallback, bo header jest teraz nieco wyższy z trzema sekcjami */
+    padding-top: var(--header-height, 150px);
 }
 
 img {
-    -webkit-user-drag: none; /* Zapobiega przeciąganiu obrazków */
+    -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
-    user-select: none; /* Zapobiega zaznaczaniu tekstu */
-    max-width: 100%; /* Upewnij się, że obrazki nie wychodzą poza kontener */
-    height: auto; /* Zachowaj proporcje obrazków */
+    user-select: none;
+    max-width: 100%;
+    height: auto;
 }
 
 a {
-    color: #d7073a; /* Domyślny kolor linków */
+    color: #d7073a;
     text-decoration: none;
-    transition: color 0.1s ease-in-out; /* Płynne przejście koloru na hover */
+    transition: color 0.1s ease-in-out;
 }
 
 a:hover,
 a:focus {
-    color: #a7052c; /* Ciemniejszy czerwony na hover/focus */
-    text-decoration: underline; /* Podkreślenie na hover */
+    color: #a7052c;
+    text-decoration: underline;
 }
 
 ul, ol, blockquote {
-    margin-bottom: 20px; /* Zmniejszono margines, aby było spójniej z Bootstrapem */
-    padding-left: 20px; /* Domyślny padding dla list */
+    margin-bottom: 20px;
+    padding-left: 20px;
 }
-
-/* Usuń style "wrapper" i "content", jeśli Bootstrapowy container jest używany w main */
-/* Jeśli chcesz niestandardowy wrapper, dodaj go tu */
-/*
-.wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-.content {
-    padding: 20px 0;
-}
-*/
 
 
 /* ==========================================================================
@@ -82,90 +69,98 @@ ul, ol, blockquote {
    ========================================================================== */
 
 #main-page-header {
-    position: sticky; /* Nagłówek jest przyklejony do góry podczas przewijania */
+    position: sticky;
     top: 0;
     width: 100%;
-    background-color: #fff; /* Białe tło nagłówka */
-    z-index: 1000; /* Upewnij się, że jest nad innymi elementami */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Delikatny cień dla nagłówka */
+    background-color: #fff; /* Białe tło całego nagłówka */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Czerwony pasek na górze nagłówka */
-.top-branding-bar {
-    background-color: #d7073a; /* Czerwony kolor */
-    color: #fff; /* Biały tekst */
-    text-align: center;
-    padding: 5px 0;
-}
-
-.center-title {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.2rem; /* Rozmiar czcionki nazwy ośrodka */
-    margin: 0; /* Usuń domyślne marginesy h1 */
-}
-
-/* Pasek z logo i ikoną burgera */
-.main-header-bar {
-    background-color: #fff; /* Białe tło paska */
+/* Górny pasek nagłówka: Burger po lewej, Logo po prawej */
+.main-header-top-bar {
+    background-color: #fff; /* Białe tło */
     padding: 10px 15px; /* Odstępy wewnętrzne */
     display: flex;
-    justify-content: flex-end; /* Wyrównanie elementów (burger i logo) do prawej */
+    justify-content: space-between; /* Burger lewo, Logo prawo */
     align-items: center;
 }
 
 .logo-link img {
     max-height: 60px; /* Wysokość logo Karma Kagyu */
-    display: block; /* Usuwa lukę pod obrazkiem */
+    display: block;
+}
+
+/* Czerwony pasek podkreślenia (nowa pozycja) */
+.red-underline-bar {
+    width: 100%;
+    height: 1px; /* Grubość paska */
+    background-color: #d7073a; /* Czerwony kolor */
+    margin: 0;
+    padding: 0;
+}
+
+/* Sekcja z nazwą ośrodka (teraz na samym dole nagłówka) */
+.center-name-section {
+    background-color: #fff; /* Białe tło (bez czerwonego) */
+    color: #333; /* Ciemny tekst */
+    padding: 10px 0; /* Padding dla nazwy ośrodka */
+    text-align: center;
+}
+
+.center-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.4rem; /* Rozmiar czcionki nazwy ośrodka */
+    margin: 0;
+    color: #333; /* Ciemny kolor tekstu nazwy ośrodka */
 }
 
 
 /* ==========================================================================
-   3. Burger Menu Icon Styles
+   3. Burger Menu Icon Styles (Bez zmian, są już dobre)
    ========================================================================= */
 
 .burger-wrap {
     cursor: pointer;
-    width: 40px; /* Szerokość obszaru klikalnego burgera */
-    height: 40px; /* Wysokość obszaru klikalnego burgera */
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent; /* Kluczowe: usuwa niechciane tło */
+    background-color: transparent;
     border: none;
     padding: 0;
-    position: relative; /* Dla pozycjonowania linii burgera wewnątrz */
-    z-index: 1001; /* Upewnij się, że jest klikalny nad innymi elementami */
+    position: relative;
+    z-index: 1001;
 }
 
 .burger {
-    width: 30px; /* Szerokość samych linii burgera */
-    height: 25px; /* Wysokość obszaru zajmowanego przez linie */
+    width: 30px;
+    height: 25px;
     position: relative;
     cursor: pointer;
 }
 
 .burger .line {
     width: 100%;
-    height: 3px; /* Grubość linii */
-    background-color: #333; /* Kolor linii burgera */
+    height: 3px;
+    background-color: #333;
     display: block;
     position: absolute;
     left: 0;
-    transition: all 0.3s ease-in-out; /* Płynna animacja */
+    transition: all 0.3s ease-in-out;
 }
 
-/* Pozycjonowanie linii (jeśli są 3) */
 .burger .line:nth-child(1) { top: 0px; }
-.burger .line:nth-child(2) { top: 11px; } /* Środkowa linia */
-.burger .line:nth-child(3) { top: 22px; } /* Dolna linia */
+.burger .line:nth-child(2) { top: 11px; }
+.burger .line:nth-child(3) { top: 22px; }
 
-/* Animacja burgera po otwarciu (zmiana na "X") */
 .burger.open .line:nth-child(1) {
     transform: translateY(11px) rotate(45deg);
 }
 .burger.open .line:nth-child(2) {
-    opacity: 0; /* Środkowa linia znika */
+    opacity: 0;
 }
 .burger.open .line:nth-child(3) {
     transform: translateY(-11px) rotate(-45deg);
@@ -173,7 +168,7 @@ ul, ol, blockquote {
 
 
 /* ==========================================================================
-   4. Overlay (Zasłona po otwarciu menu)
+   4. Overlay (Zasłona po otwarciu menu) (Bez zmian)
    ========================================================================== */
 
 .overlay {
@@ -182,61 +177,61 @@ ul, ol, blockquote {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Półprzezroczysty czarny */
-    z-index: 1040; /* Poniżej głównego menu, ale nad resztą strony */
-    display: none; /* Domyślnie ukryty */
-    opacity: 0; /* Początkowa przezroczystość */
-    transition: opacity 0.3s ease-in-out; /* Płynne pojawianie/znikanie */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 body.overlay-open .overlay {
-    display: block; /* Pokazany, gdy menu jest otwarte */
+    display: block;
     opacity: 1;
 }
 
 body.overflow-hidden {
-    overflow: hidden; /* Zapobiega przewijaniu tła, gdy menu jest otwarte */
+    overflow: hidden;
 }
 
 
 /* ==========================================================================
-   5. Główne Menu (Wysuwane z boku - Side Navigation)
+   5. Główne Menu (Wysuwane z boku - Side Navigation) (Bez zmian)
    ========================================================================== */
 
 .main-menu {
     position: fixed;
     top: 0;
-    left: -300px; /* Domyślnie ukryte poza ekranem */
-    width: 300px; /* Szerokość menu */
+    left: -300px;
+    width: 300px;
     height: 100%;
-    background-color: #fff; /* Białe tło menu */
-    color: #333; /* Domyślny kolor tekstu w menu */
+    background-color: #fff;
+    color: #333;
     transition: left 0.3s ease-in-out;
-    z-index: 1050; /* Z-index wyższy niż overlay */
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Ciepły cień menu */
-    overflow-y: auto; /* Przewijanie, jeśli zawartość jest długa */
-    -webkit-overflow-scrolling: touch; /* Lepsze przewijanie na iOS */
+    z-index: 1050;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .main-menu.open {
-    left: 0; /* Wysuwanie menu */
+    left: 0;
 }
 
 .main-menu-wrap {
-    padding-bottom: 20px; /* Dodaje miejsce na dole menu */
+    padding-bottom: 20px;
 }
 
 .menu-header-top {
-    background-color: #f8f8f8; /* Jasne tło dla nagłówka w menu (gdzie jest logo i X) */
+    background-color: #f8f8f8;
     border-bottom: 1px solid #eee;
-    padding: 10px 15px; /* Padding wewnętrzny */
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .menu-logo img {
-    max-height: 50px; /* Wysokość logo w menu */
+    max-height: 50px;
 }
 
 .close-menu {
@@ -244,10 +239,9 @@ body.overflow-hidden {
     cursor: pointer;
     color: #666;
     padding: 5px 10px;
-    line-height: 1; /* Zapobiega dodatkowym odstępom */
+    line-height: 1;
 }
 
-/* Stylizacja linków w menu */
 .main-menu-links ul {
     list-style: none;
     padding: 0;
@@ -260,9 +254,9 @@ body.overflow-hidden {
 
 .main-menu-links .nav-link,
 .main-menu-links a {
-    color: #333; /* Kolor tekstu linków - UPEWNIJ SIĘ, ŻE JEST CZYTELNY */
+    color: #333;
     padding: 10px 15px;
-    display: block; /* Linki wypełniają całą szerokość dla lepszej klikalności */
+    display: block;
     text-decoration: none;
     transition: background-color 0.2s ease, color 0.2s ease;
     font-size: 1rem;
@@ -271,25 +265,25 @@ body.overflow-hidden {
 .main-menu-links .nav-link:hover,
 .main-menu-links a:hover {
     background-color: #eee;
-    color: #d7073a; /* Czerwony kolor przy najechaniu */
+    color: #d7073a;
 }
 
 .main-menu-links .nav-link.active,
 .main-menu-links a.active {
     font-weight: bold;
-    color: #d7073a; /* Aktywny link czerwony */
+    color: #d7073a;
     background-color: #f5f5f5;
 }
 
 
 /* ==========================================================================
-   6. Sekcje dodatkowe w menu (Spis Treści, Archiwum, Dodatkowe Linki)
+   6. Sekcje dodatkowe w menu (Spis Treści, Archiwum, Dodatkowe Linki) (Bez zmian)
    ========================================================================== */
 
 .table-of-contents-in-menu,
 #main-menu-archive,
 .extra-menu-links {
-    border-top: 1px solid #eee; /* Linia oddzielająca sekcje */
+    border-top: 1px solid #eee;
     padding-top: 15px;
     margin-top: 15px;
 }
@@ -298,28 +292,28 @@ body.overflow-hidden {
     font-size: 1.1rem;
     color: #555;
     margin-bottom: 10px;
-    padding-left: 15px; /* Wcięcie dla tytułów sekcji */
+    padding-left: 15px;
 }
 
-.table-of-contents-in-menu ul ul, /* Zagnieżdżone listy w TOC */
-#main-menu-archive ul ul { /* Zagnieżdżone listy w archiwum */
+.table-of-contents-in-menu ul ul,
+#main-menu-archive ul ul {
     margin-left: 15px;
-    border-left: 1px solid #ddd; /* Opcjonalna linia po lewej */
+    border-left: 1px solid #ddd;
 }
 
 .table-of-contents-in-menu a {
-    font-size: 0.9rem; /* Mniejszy rozmiar czcionki dla linków TOC */
-    padding: 5px 15px; /* Mniejsze paddingi */
+    font-size: 0.9rem;
+    padding: 5px 15px;
 }
 
-.table-of-contents-in-menu a.ms-3 { /* Dodatkowe wcięcie dla H3 (generowane przez JS) */
-    padding-left: 30px; /* Zwiększone wcięcie */
+.table-of-contents-in-menu a.ms-3 {
+    padding-left: 30px;
 }
 
 .table-of-contents-in-menu a.active-toc-link {
     color: #d7073a;
     font-weight: bold;
-    background-color: #ffe0e0; /* Jasnoczerwone tło dla aktywnego TOC */
+    background-color: #ffe0e0;
 }
 
 .extra-menu-links .nav-link {
@@ -330,49 +324,49 @@ body.overflow-hidden {
 
 
 /* ==========================================================================
-   7. Style głównej zawartości strony (Main Content)
+   7. Style głównej zawartości strony (Main Content) (Bez zmian)
    ========================================================================== */
 
-#main-content-area { /* Używamy ID z base.html */
-    /* Wszystko już przesunięte przez padding-top na body */
-    /* Upewnij się, że .container w base.html zapewnia prawidłową szerokość i marginesy */
+#main-content-area {
+    /* Padding-top jest na body, aby treść zaczynała się pod sticky headerem. */
+    /* Ten kontener (Bootstrap .container) zajmie się szerokością i wycentrowaniem treści. */
 }
 
 
 /* ==========================================================================
-   8. Stopka (Footer)
+   8. Stopka (Footer) (Bez zmian)
    ========================================================================== */
 
 footer {
-    background-color: #333; /* Ciemne tło stopki */
-    color: #fff; /* Biały tekst stopki */
-    padding: 30px 0; /* Padding góra/dół */
-    margin-top: 40px; /* Margines od treści głównej */
+    background-color: #333;
+    color: #fff;
+    padding: 30px 0;
+    margin-top: 40px;
 }
 
 footer p, footer a, footer li {
-    color: #fff; /* Upewnij się, że cały tekst i linki są białe w stopce */
+    color: #fff;
     text-decoration: none;
 }
 
 footer a:hover {
-    color: #d7073a; /* Czerwony na hover w stopce */
+    color: #d7073a;
     text-decoration: underline;
 }
 
 footer .text-uppercase {
-    color: #fff; /* Tytuły sekcji w stopce */
+    color: #fff;
 }
 
 footer hr {
-    border-color: rgba(255, 255, 255, 0.2); /* Delikatna linia oddzielająca */
+    border-color: rgba(255, 255, 255, 0.2);
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
 
 /* ==========================================================================
-   9. Media Queries (Responsywność)
+   9. Media Queries (Responsywność) (Dostosowania dla rozmiaru czcionki)
    ========================================================================== */
 
 /* Dla mniejszych ekranów (np. tablety, telefony) */
@@ -381,15 +375,15 @@ footer hr {
         font-size: 1rem; /* Zmniejsz rozmiar tytułu ośrodka na mobilnych */
     }
     .logo-link img {
-        max-height: 50px; /* Zmniejsz rozmiar logo na mobilnych */
+        max-height: 45px; /* Zmniejsz rozmiar logo na mobilnych dla lepszego dopasowania */
     }
     .main-menu {
-        width: 80%; /* Menu zajmuje 80% szerokości na małych ekranach */
-        max-width: 300px; /* Ale nie więcej niż 300px */
+        width: 80%;
+        max-width: 300px;
     }
     .main-menu-links .nav-link,
     .main-menu-links a {
-        font-size: 0.9rem; /* Zmniejsz rozmiar czcionki w menu na mobilnych */
+        font-size: 0.9rem;
         padding: 8px 10px;
     }
     .menu-section-title {
@@ -400,10 +394,3 @@ footer hr {
         font-size: 0.85rem;
     }
 }
-
-/* Możesz dodać więcej media queries dla konkretnych breakpointów, jeśli potrzebujesz */
-/*
-@media (min-width: 768px) and (max-width: 991.98px) { // Tablets
-    // Styles for tablets
-}
-*/
