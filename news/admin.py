@@ -9,24 +9,25 @@ class ArticleAdminForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = '__all__'
-
+        
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
-    list_display = ('title', 'published_date', 'is_published', 'is_pinned', 'updated_at') # Dodano 'is_published', 'is_pinned'
-    list_filter = ('is_published', 'is_pinned', 'published_date') # Dodano filtry dla nowych pól
+    # DODAJEMY 'pin_order' DO LISTY
+    list_display = ('title', 'published_date', 'is_published', 'is_pinned', 'pin_order', 'updated_at')
+    list_filter = ('is_published', 'is_pinned', 'published_date')
     search_fields = ('title', 'content')
     prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'published_date' # Używamy published_date
-    ordering = ('-published_date',) # Domyślne sortowanie w adminie
+    date_hierarchy = 'published_date'
+    ordering = ('-published_date',)
 
-    # Opcjonalnie: fieldsets do lepszej organizacji formularza edycji
     fieldsets = (
         (None, {
             'fields': ('title', 'slug', 'thumbnail', 'content')
         }),
         ('Ustawienia Publikacji', {
-            'fields': ('published_date', 'is_published', 'is_pinned'),
-            'classes': ('collapse',), # Zwijany panel dla tych ustawień
+            # DODAJEMY 'pin_order' DO FORMULARZA
+            'fields': ('published_date', 'is_published', 'is_pinned', 'pin_order'),
+            'classes': ('collapse',),
         }),
     )

@@ -1,76 +1,88 @@
-{# templates/news/archive_list.html #}
+{# templates/news/archive_list.html - WERSJA Z POLSKIM TYTUŁEM #}
 {% extends 'base.html' %}
 {% load static %}
-{% load i18n %}
-{% load humanize %}
 {% load news_filters %}
 
-{% block title %}{{ archive_title }} - Mini CMS{% endblock %}
+{% block title %}
+    {# NOWA LOGIKA DLA TYTUŁU STRONY #}
+    {% if selected_year and selected_month %}
+        Archiwum: {{ selected_month|month_name|capfirst }} {{ selected_year }}
+    {% elif selected_year %}
+        Archiwum: Rok {{ selected_year }}
+    {% else %}
+        Archiwum Aktualności
+    {% endif %}
+{% endblock title %}
 
 {% block content %}
-    <div class="row">
-        {# Główna treść strony z listą artykułów w archiwum na pełną szerokość #}
-        <div class="col-md-12">
-            <h1 class="mb-4">{{ archive_title }}</h1>
+<div class="content-container">
+
+    <h1 class="page-main-title">
+        {# NOWA LOGIKA DLA NAGŁÓWKA H1 #}
+        {% if selected_year and selected_month %}
+            Archiwum: {{ selected_month|month_name|capfirst }} {{ selected_year }}
+        {% elif selected_year %}
+            Archiwum: Rok {{ selected_year }}
+        {% else %}
+            Archiwum Aktualności
+        {% endif %}
+    </h1>
+
+    <div class="archive-layout">
+        {# Główna kolumna z artykułami (bez zmian) #}
+        <div class="archive-main">
             {% if articles %}
                 {% for article in articles %}
-                    {# Dodano klasę 'pinned-article' i opcjonalną plakietkę #}
-                    <div class="card mb-3 {% if article.is_pinned %}pinned-article{% endif %}">
-                        <div class="row g-0">
-                            {% if article.thumbnail %}
-                                <div class="col-md-4">
-                                    <img src="{{ article.thumbnail.url }}" class="img-fluid rounded-start" alt="{{ article.title }}">
-                                </div>
-                            {% endif %}
-                            <div class="{% if article.thumbnail %}col-md-8{% else %}col-md-12{% endif %}">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <a href="{% url 'news:article_detail' slug=article.slug %}" class="text-decoration-none">{{ article.title }}</a>
-                                        {% if article.is_pinned %}
-                                            <span class="badge bg-primary ms-2">Przypięte</span>
-                                        {% endif %}
-                                    </h5>
-                                    <p class="card-text"><small class="text-muted">Opublikowano: {{ article.published_date|date:"Y-m-d H:i" }}</small></p>
-                                    <p class="card-text">{{ article.content|striptags|truncatewords:50 }}</p>
-                                    <a href="{% url 'news:article_detail' slug=article.slug %}" class="btn btn-primary btn-sm">Czytaj więcej</a>
-                                </div>
-                            </div>
+                    <div class="archive-entry">
+                        {% if article.thumbnail %}
+                            <a href="{{ article.get_absolute_url }}"><img src="{{ article.thumbnail.url }}" class="archive-entry-thumb" alt="{{ article.title }}"></a>
+                        {% endif %}
+                        <div class="archive-entry-content">
+                            <h2 class="archive-entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+                            <p class="archive-entry-meta">
+                                Opublikowano: {{ article.published_date|date:"d F Y" }}
+                                {% if article.is_pinned %}<span class="pinned-badge">Przypięty</span>{% endif %}
+                            </p>
+                            <p class="archive-entry-summary">{{ article.content|striptags|truncatewords:40 }}</p>
+                            <a href="{{ article.get_absolute_url }}" class="archive-read-more">Czytaj więcej &rarr;</a>
                         </div>
                     </div>
                 {% endfor %}
 
-                {# Paginacja dla archiwum #}
                 {% if articles.has_other_pages %}
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            {% if articles.has_previous %}
-                                <li class="page-item"><a class="page-link" href="?page={{ articles.previous_page_number }}">Poprzednia</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Poprzednia</span></li>
-                            {% endif %}
-                            {# Wyświetlanie numerów stron #}
-                            {% for num in articles.paginator.page_range %}
-                                {% if articles.number == num %}
-                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
-                                {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if articles.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ articles.next_page_number }}">Następna</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Następna</span></li>
-                            {% endif %}
-                        </ul>
+                    <nav class="pagination-nav">
+                        {% if articles.has_previous %}<a href="?page={{ articles.previous_page_number }}" class="page-arrow">&larr; Poprzednia</a>{% endif %}
+                        <span class="page-info">Strona {{ articles.number }} z {{ articles.paginator.num_pages }}</span>
+                        {% if articles.has_next %}<a href="?page={{ articles.next_page_number }}" class="page-arrow">Następna &rarr;</a>{% endif %}
                     </nav>
                 {% endif %}
-
             {% else %}
-                <p class="lead">Brak aktualności w tym okresie archiwum.</p>
+                <p>Brak aktualności w tym okresie archiwum.</p>
             {% endif %}
         </div>
 
-        {# WAŻNE: Usunięto cały sidebar z archiwum, który był w div.col-md-3 #}
+        {# Boczna kolumna z nawigacją po archiwum (bez zmian) #}
+        <aside class="archive-sidebar">
+            <h4 class="sidebar-title">Przeglądaj Archiwum</h4>
+            <ul class="archive-year-list">
+                {% for year, months in archive_years_structured.items %}
+                    <li>
+                        <a href="{% url 'news:archive_year' year=year %}" class="year-link {% if year == selected_year and not selected_month %}active-archive-link{% endif %}">{{ year }}</a>
+                        {% if year == selected_year %}
+                            <ul class="archive-month-list">
+                                {% for month_data in months %}
+                                    <li>
+                                        <a href="{% url 'news:archive_month' year=year month=month_data.month_num %}" class="month-link {% if month_data.month_num == selected_month %}active-archive-link{% endif %}">
+                                            {{ month_data.month_num|month_name|capfirst }} ({{ month_data.count }})
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
     </div>
+</div>
 {% endblock content %}

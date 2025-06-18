@@ -1,118 +1,73 @@
-{# Twój plik HTML stopki, np. templates/footer.html #}
-
-<footer class="mt-auto py-5"> {# USUNIĘTO style="background-color: #d7073a; color: #ffffff;" #}
-    <div class="container footer-content">
-        <div class="row">
-
-            {# Kolumna 1: Informacje kontaktowe #}
-            <div class="col-md-3 col-sm-6 mb-4">
-                <h5 class="text-uppercase mb-4">Kontakt</h5> {# USUNIĘTO text-white, będzie z CSS #}
-                {% if footer_content %}
-                    {% if footer_content.address %}<p>{{ footer_content.address|safe }}</p>{% endif %} {# USUNIĘTO text-white #}
-                    {% if footer_content.contact_phone %}<p>Tel: <a href="tel:{{ footer_content.contact_phone }}">{{ footer_content.contact_phone }}</a></p>{% endif %} {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    {% if footer_content.contact_email %}<p>Email: <a href="mailto:{{ footer_content.contact_email }}">{{ footer_content.contact_email }}</a></p>{% endif %} {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                {% else %}
-                    <p>Adres ośrodka</p>
-                    <p>Tel: +48 XXX XXX XXX</p>
-                    <p>Email: kontakt@example.com</p>
+{# templates/footer.html - WERSJA Z LOGOWANIEM #}
+{% if footer_content %}
+<div class="footer-container-custom">
+    <div class="footer-main-content">
+        {# Kolumna 1: Informacje kontaktowe #}
+        <div class="footer-column">
+            <h5 class="footer-title">Kontakt</h5>
+            <div class="footer-text">
+                {{ footer_content.address|safe }}
+                {% if footer_content.contact_phone %}
+                    <p>Tel: <a href="tel:{{ footer_content.contact_phone }}">{{ footer_content.contact_phone }}</a></p>
                 {% endif %}
-            </div>
-
-            {# Kolumna 2: Mapa strony - GENEROWANA DYNAMICZNIE Z all_pages #}
-            <div class="col-md-3 col-sm-6 mb-4">
-                <h5 class="text-uppercase mb-4">Mapa Strony</h5> {# USUNIĘTO text-white #}
-                <ul class="list-unstyled"> {# USUNIĘTO text-white #}
-                    <li class="nav-item">
-                        <a href="{% url 'home' %}">Strona główna</a> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    </li>
-                    {% for page in all_pages %}
-                        {% if page.is_published %}
-                            <li class="nav-item">
-                                <a href="{% url 'pages:detail' slug=page.slug %}">{{ page.title }}</a> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    <li class="nav-item">
-                        <a href="{% url 'news:list' %}">Aktualności</a> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'news:archive_all' %}">Archiwum</a> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    </li>
-                </ul>
-            </div>
-
-            {# Kolumna 3: Zobacz też #}
-            <div class="col-md-3 col-sm-6 mb-4">
-                <h5 class="text-uppercase mb-4">Zobacz też</h5> {# USUNIĘTO text-white #}
-                {% if footer_content.zobacz_tez_html %}
-                    <div> {# USUNIĘTO text-white #}
-                        {{ footer_content.zobacz_tez_html|safe }} {# ZMODYFIKOWANO TĄ LINIĘ #}
-                    </div>
-                {% else %}
-                    <ul class="list-unstyled"> {# USUNIĘTO text-white #}
-                        <li><a href="#">Buddyzm w Polsce</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                        <li><a href="#">Buddyzm na świecie</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                        <li><a href="#">Magazyn</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    </ul>
-                {% endif %}
-            </div>
-
-            {# Kolumna 4: Ośrodki w pobliżu & Wsparcie #}
-            <div class="col-md-3 col-sm-6 mb-4">
-                <h5 class="text-uppercase mt-4 mb-4">Ośrodki w pobliżu</h5> {# USUNIĘTO text-white #}
-                {% if footer_content.osrodki_w_poblizu_html %}
-                    <div> {# USUNIĘTO text-white #}
-                        {{ footer_content.osrodki_w_poblizu_html|safe }} {# ZMODYFIKOWANO TĄ LINIĘ #}
-                    </div>
-                {% else %}
-                    <ul class="list-unstyled"> {# USUNIĘTO text-white #}
-                        <li><a href="#">Rybnik</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                        <li><a href="#">Żory</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                        <li><a href="#">Wodzisław Śląski</a></li> {# USUNIĘTO text-white text-decoration-none footer-link-hover-dark #}
-                    </ul>
-                {% endif %}
-
-                <h5 class="text-uppercase mt-4 mb-4">Wsparcie</h5> {# USUNIĘTO text-white #}
-                {% if footer_content.bank_info_html %}
-                    <div> {# USUNIĘTO text-white #}
-                        {{ footer_content.bank_info_html|safe }} {# ZMODYFIKOWANO TĄ LINIĘ #}
-                    </div>
-                {% else %}
-                    <p class="mb-1">Dane bankowe</p> {# USUNIĘTO text-white #}
-                    <p class="mb-1">Nr konta: XXXX XXXX XXXX XXXX XXXX XXXX</p> {# USUNIĘTO text-white #}
-                    <p class="mb-1">SWIFT/BIC: XXXXXXXX</p> {# USUNIĘTO text-white #}
-                    <p class="small">Tytuł: Darowizna</p> {# USUNIĘTO text-white #}
+                {% if footer_content.contact_email %}
+                    <p>Email: <a href="mailto:{{ footer_content.contact_email }}">{{ footer_content.contact_email }}</a></p>
                 {% endif %}
             </div>
         </div>
 
-        <hr> {# USUNIĘTO style="border-color: rgba(255, 255, 255, 0.5);" #}
-
-        {# Dolna sekcja: Prawa autorskie i panel logowania #}
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center text-md-start">
-                {% if footer_content.copyright_text %}
-                    <p class="mb-0">{{ footer_content.copyright_text|safe }}</p> {# USUNIĘTO text-white #}
-                {% else %}
-                    <p class="mb-0">&copy; {% now "Y" %} Twoja Nazwa. Wszelkie prawa zastrzeżone.</p> {# USUNIĘTO text-white #}
-                {% endif %}
-            </div>
-            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-                <ul class="list-inline mb-0">
-                    {% if user.is_authenticated %}
-                        <li class="list-inline-item">
-                            <span class="small">Witaj, {{ user.username }}!</span> {# USUNIĘTO text-white #}
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="{% url 'admin:index' %}" class="btn btn-outline-light btn-sm">Panel Admina</a>
-                        </li>
-                    {% else %}
-                        <li class="list-inline-item">
-                            <a href="{% url 'admin:login' %}" class="btn btn-outline-light btn-sm">Zaloguj</a>
-                        </li>
+        {# Kolumna 2: Mapa Strony #}
+        <div class="footer-column">
+            <h5 class="footer-title">Mapa Strony</h5>
+            <ul class="footer-links">
+                <li><a href="{% url 'home' %}">Strona Główna</a></li>
+                {% for page in all_pages %}
+                    {% if page.is_published %}
+                        <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
                     {% endif %}
-                </ul>
+                {% endfor %}
+                <li><a href="{% url 'news:archive_all' %}">Archiwum</a></li>
+            </ul>
+        </div>
+
+        {# Kolumna 3: Zobacz też #}
+        <div class="footer-column">
+            <h5 class="footer-title">Zobacz też</h5>
+            <div class="footer-html-content">
+                {{ footer_content.zobacz_tez_html|safe }}
+            </div>
+        </div>
+
+        {# Kolumna 4: Ośrodki i Wsparcie #}
+        <div class="footer-column">
+            <h5 class="footer-title">Ośrodki w pobliżu</h5>
+            <div class="footer-html-content">
+                {{ footer_content.osrodki_w_poblizu_html|safe }}
+            </div>
+            
+            <h5 class="footer-title mt-4">Wsparcie</h5>
+            <div class="footer-html-content">
+                {{ footer_content.bank_info_html|safe }}
             </div>
         </div>
     </div>
-</footer>
+
+    {# NOWA, ZAKTUALIZOWANA DOLNA SEKCJA STOPKI #}
+    <div class="footer-bottom">
+        <div class="footer-login">
+            {% if user.is_authenticated %}
+                <a href="{% url 'admin:index' %}" class="footer-login-link">Panel Admina</a>
+            {% else %}
+                <a href="{% url 'admin:login' %}" class="footer-login-link">Zaloguj</a>
+            {% endif %}
+        </div>
+        <div class="footer-copyright">
+            {% if footer_content.copyright_text %}
+                {{ footer_content.copyright_text|safe }}
+            {% else %}
+                &copy; {% now "Y" %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

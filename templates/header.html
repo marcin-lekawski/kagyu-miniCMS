@@ -1,18 +1,14 @@
-{# templates/header.html #}
-
+{# templates/header.html - WERSJA OSTATECZNA #}
 {% load static %}
-{% load news_filters %}
 
-<header>
-    <!-- burger menu i nawigacja-->
-    <div class="burger-wrap">
-        <div class="burger navbar-brand ms-auto order-lg-last">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            </a>
-        </div>
+<div class="header-container">
+    <div class="burger-menu-icon" id="burger-menu-icon">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
     </div>
-     
-</header>
+
+    <a href="{% url 'home' %}" class="logo-right">
+        <img src="{% static 'img/logo_karma_kagyu.png' %}" alt="Logo Karma Kagyu">
+    </a>
+</div>

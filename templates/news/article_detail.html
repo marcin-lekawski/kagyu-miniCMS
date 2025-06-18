@@ -1,17 +1,34 @@
-{# templates/news/article_detail.html #}
+{# templates/news/article_detail.html - WERSJA OSTATECZNA #}
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}{{ article.title }} - Aktualności{% endblock %}
+{% block title %}{{ article.title }}{% endblock title %}
 
 {% block content %}
-    <h1 class="mb-4">{{ article.title }}</h1>
-    <p class="text-muted mb-4">Opublikowano: {{ article.published_date|date:"Y-m-d H:i" }}</p>
+<div class="content-container">
+
+    {# Główny tytuł artykułu, używający naszej standardowej klasy #}
+    <h1 class="page-main-title">{{ article.title }}</h1>
+
+    {# Metadane artykułu (data) z nową, prostą klasą do ostylowania #}
+    <p class="article-meta-detail">
+        Opublikowano: {{ article.published_date|date:"d F Y" }}
+    </p>
+
+    {# Miniatura, jeśli istnieje, używająca tej samej klasy co na stronach statycznych #}
     {% if article.thumbnail %}
-        <img src="{{ article.thumbnail.url }}" alt="{{ article.title }}" class="img-fluid mb-4 rounded">
+        <img src="{{ article.thumbnail.url }}" class="page-header-image" alt="{{ article.title }}">
     {% endif %}
-    <div class="article-content lead">
-        {{ article.content|safe }} {# Używamy |safe, bo TinyMCE generuje HTML #}
+
+    {# Główna treść artykułu #}
+    <div class="article-full-content">
+        {{ article.content|safe }}
     </div>
-    <p class="text-muted mt-4">Ostatnia aktualizacja: {{ article.updated_at|date:"Y-m-d H:i" }}</p>
-    <a href="{% url 'news:list' %}" class="btn btn-secondary mt-3">Powrót do aktualności</a> {# Link 'Powrót do aktualności' jest już poprawny #}
+
+    {# Stopka artykułu z linkiem powrotnym #}
+    <div class="article-footer">
+        <a href="{% url 'home' %}" class="back-link">&larr; Powrót na stronę główną</a>
+    </div>
+
+</div>
 {% endblock content %}

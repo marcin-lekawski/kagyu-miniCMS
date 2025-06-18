@@ -1,3 +1,4 @@
+# news/templatetags/news_filters.py
 from django import template
 import calendar
 import re # Możesz usunąć 'import re', jeśli nie jest używane przez inne filtry
