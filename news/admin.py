@@ -13,21 +13,23 @@ class ArticleAdminForm(forms.ModelForm):
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
-    # DODAJEMY 'pin_order' DO LISTY
     list_display = ('title', 'published_date', 'is_published', 'is_pinned', 'pin_order', 'updated_at')
-    list_filter = ('is_published', 'is_pinned', 'published_date')
-    search_fields = ('title', 'content')
-    prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'published_date'
-    ordering = ('-published_date',)
-
+    # ... inne ustawienia listy bez zmian ...
+    
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'thumbnail', 'content')
+            'fields': ('title', 'slug', 'content')
+        }),
+        ('Miniatura', {
+            'fields': ('thumbnail', 'thumbnail_size', 'thumbnail_custom_width', 'thumbnail_alignment'), # <-- Dodajemy nowe pole
+            'description': "Opcjonalna miniatura wyświetlana na liście postów."
         }),
         ('Ustawienia Publikacji', {
-            # DODAJEMY 'pin_order' DO FORMULARZA
             'fields': ('published_date', 'is_published', 'is_pinned', 'pin_order'),
             'classes': ('collapse',),
         }),
     )
+
+    # NOWA SEKCJA: Dołączamy plik JS do strony edycji artykułu
+    class Media:
+        js = ('js/admin_thumbnail_toggle.js',)

@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
+from django.urls import reverse_lazy  
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -152,8 +153,22 @@ TINYMCE_DEFAULT_CONFIG = {
     "width": "100%",
     "menubar": "file edit view insert format tools table help",
     "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
-    "toolbar": "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+    "toolbar": "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image",
     "custom_undo_redo_levels": 10,
-    "language": "pl", # Ustaw język edytora na polski
-    "extended_valid_elements": "iframe[src|title|width|height|allowfullscreen|frameborder],script[src|type]", # Przykład dla osadzania wideo
+    "language": "pl",
+    
+    # --- UPROSZCZONE I POPRAWNE USTAWIENIA DLA UPLOADU OBRAZÓW ---
+    
+    # Podajemy adres URL do naszego widoku
+    "images_upload_url": "/tinymce/upload-image/",
+    
+    # Mówimy TinyMCE, aby automatycznie przesyłał obraz po jego wybraniu
+    "automatic_uploads": True,
+    
+    # Mówimy, że chcemy używać uploadera tylko dla obrazów
+    "file_picker_types": "image",
+    
+    # WAŻNE: To ustawienie mówi przeglądarce, aby wysłała pliki cookie 
+    # (w tym token CSRF) razem z żądaniem przesłania pliku.
+    "images_upload_credentials": True,
 }

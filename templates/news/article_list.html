@@ -1,8 +1,11 @@
 {# templates/news/article_list.html - WERSJA OSTATECZNA #}
 {% extends 'base.html' %}
+
 {% block title %}Strona Główna{% endblock title %}
+
 {% block content %}
 <div class="content-container">
+
     <div class="page-main-title">
         {% if header_content and header_content.site_name %}
             {{ header_content.site_name|safe }}
@@ -10,15 +13,30 @@
             Buddyjski Ośrodek Medytacyjny w Rybniku
         {% endif %}
     </div>
+
     <div class="article-list">
         {% for article in articles %}
             <article class="article-entry">
+                
+                {% if article.thumbnail %}
+                    <div class="thumbnail-wrapper align-{{ article.thumbnail_alignment|lower }}">
+                        <a href="{{ article.get_absolute_url }}">
+                            {# Logika do obsługi różnych rozmiarów miniaturki #}
+                            {% if article.thumbnail_size == 'CUSTOM' and article.thumbnail_custom_width %}
+                                <img src="{{ article.thumbnail.url }}" class="article-thumbnail" style="max-width: {{ article.thumbnail_custom_width }}px;" alt="{{ article.title }}">
+                            {% else %}
+                                <img src="{{ article.thumbnail.url }}" class="article-thumbnail size-{{ article.thumbnail_size|lower }}" alt="{{ article.title }}">
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+
                 <div class="article-full-content">
                     {{ article.content|safe }}
                 </div>
             </article>
         {% empty %}
-            <p>Brak dostępnych aktualności.</p>
+            <p>Brak postów.</p>
         {% endfor %}
     </div>
 </div>

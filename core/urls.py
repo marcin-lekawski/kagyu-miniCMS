@@ -22,6 +22,8 @@ from news.views import ArticleListView
 # Dodaj importy do obsługi plików statycznych i mediów
 from django.conf import settings
 from django.conf.urls.static import static
+from site_config.views import upload_image
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +33,8 @@ urlpatterns = [
     # Dzięki temu użytkownicy będą mogli korzystać z edytora TinyMCE do tworzenia i edycji treści stron.
     path('tinymce/', include('tinymce.urls')),
 
+    # NOWY ADRES URL DLA UPLOADERA
+    path('tinymce/upload-image/', upload_image, name='tinymce-upload-image'),
 
     # Strona główna - teraz będzie wyświetlać listę aktualności
     # Możemy zmienić to na TemplateView jeśli chcemy statyczną stronę główną
