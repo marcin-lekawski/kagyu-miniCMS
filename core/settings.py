@@ -149,26 +149,63 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # TinyMCE settings
 TINYMCE_DEFAULT_CONFIG = {
-    "height": "400px",
+    "height": "500px",
     "width": "100%",
     "menubar": "file edit view insert format tools table help",
-    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
-    "toolbar": "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image",
+    
+    # Lista wtyczek - upewniamy się, że są wszystkie potrzebne
+    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount hr autosave template",
+    
+    # POPRAWKA: Używamy 'styleselect' dla naszego niestandardowego menu formatów
+    "toolbar": "undo redo | styleselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | hr | removeformat | image template | code",
+    
     "custom_undo_redo_levels": 10,
     "language": "pl",
     
-    # --- UPROSZCZONE I POPRAWNE USTAWIENIA DLA UPLOADU OBRAZÓW ---
-    
-    # Podajemy adres URL do naszego widoku
+    # Ustawienia uploadu obrazów (bez zmian)
     "images_upload_url": "/tinymce/upload-image/",
-    
-    # Mówimy TinyMCE, aby automatycznie przesyłał obraz po jego wybraniu
     "automatic_uploads": True,
-    
-    # Mówimy, że chcemy używać uploadera tylko dla obrazów
     "file_picker_types": "image",
-    
-    # WAŻNE: To ustawienie mówi przeglądarce, aby wysłała pliki cookie 
-    # (w tym token CSRF) razem z żądaniem przesłania pliku.
     "images_upload_credentials": True,
+
+    # --- templates zostaje bez zmian jest dobrze ---
+    "templates": [
+        {
+            "title": "Szablon standardowej strony",
+            "description": "Użyj do tworzenia stron informacyjnych (np. Czym jest buddyzm, Medytacja).",
+            "content": """
+                <h2>Wprowadzenie [Nagłówek H2]</h2>
+                <p>Zacznij tutaj swój artykuł od krótkiego wprowadzenia...</p>
+                <h3>Podtytuł sekcji [Nagłówek H3]</h3>
+                <p>Tutaj możesz rozwinąć myśl z wprowadzenia...</p>
+                <h2>Kolejna ważna sekcja [Nagłówek H2]</h2>
+                <p>Opis kolejnej ważnej części Twojego artykułu.</p>
+            """
+        },
+        {
+            "title": "Szablon ogłoszenia o kursie",
+            "description": "Szablon do informowania o nadchodzących kursach i wydarzeniach.",
+            "content": """
+                <h2>[Tytuł kursu] z [Imię nauczyciela]</h2>
+                <p><em>W dniach [data rozpoczęcia] - [data zakończenia] serdecznie zapraszamy na kurs...</em></p>
+                <h3>Harmonogram</h3>
+                <ul>
+                <li><strong>Piątek:</strong> XX:XX - Wykład wprowadzający</li>
+                <li><strong>Sobota:</strong> XX:XX - Sesja medytacyjna, ...</li>
+                <li><strong>Niedziela:</strong> XX:XX - Sesja medytacyjna, ...</li>
+                </ul>
+                <h3>Informacje organizacyjne</h3>
+                <ul>
+                <li><strong>Miejsce:</strong> [Wpisz miejsce]</li>
+                <li><strong>Koszt:</strong> X zł</li>
+                <li><strong>Kontakt i zapisy:</strong> [Wpisz kontakt]</li>
+                </ul>
+            """
+        }
+    ],
+    # --- ten fragment usunięty ---
+    
+    # Pozostawiamy content_css, aby style niestandardowe były widoczne w edytorze
+    #"content_css": "/static/css/style.css"
 }
+
