@@ -1,0 +1,116 @@
+[
+{
+  "model": "news.article",
+  "pk": 1,
+  "fields": {
+    "title": "XVII Karmapa Taje Dordże",
+    "slug": "nowa-rzecz",
+    "content": "<p><strong>XVII Karmapa Taje Dordże</strong> &ndash; Obecny XVII Karmapa Taje Dordże jest odpowiedzialny za ponad 900 klasztor&oacute;w i ośrodk&oacute;w buddyjskich na świecie, w tym r&oacute;wnież za ośrodki Diamentowej Drogi.</p>",
+    "thumbnail": "news_thumbnails/teacher_17_karmapa-150x150.jpg",
+    "thumbnail_size": "M",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "RIGHT",
+    "published_date": "2025-06-15T12:56:51Z",
+    "is_published": true,
+    "is_pinned": true,
+    "pin_order": 3,
+    "created_at": "2025-06-15T12:57:10.279Z",
+    "updated_at": "2025-06-20T10:03:16.529Z"
+  }
+},
+{
+  "model": "news.article",
+  "pk": 2,
+  "fields": {
+    "title": "nowszy news",
+    "slug": "nowszy-news",
+    "content": "<p>nowszy news</p>",
+    "thumbnail": "",
+    "thumbnail_size": "FULL",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "CENTER",
+    "published_date": "2025-06-15T12:57:10Z",
+    "is_published": true,
+    "is_pinned": false,
+    "pin_order": 0,
+    "created_at": "2025-06-15T12:57:27.885Z",
+    "updated_at": "2025-06-15T12:57:27.885Z"
+  }
+},
+{
+  "model": "news.article",
+  "pk": 3,
+  "fields": {
+    "title": "medytacje",
+    "slug": "medytacje",
+    "content": "<div class=\"full-width-image-container\">\r\n<p><strong><img src=\"../../../../../media/budda_logo.jpg\" alt=\"\" width=\"2048\" height=\"623\"></strong></p>\r\n</div>\r\n<p><strong>Medytacja 16 Karmapy w poniedziałki i środy o 19:00.&nbsp;</strong></p>\r\n<p><strong>PIERWSZA WIZYTA</strong><br>Wszystkie osoby, kt&oacute;re chciałyby przyjść do ośrodka po raz pierwszy, i uzyskać wstępne wyjaśnienia dotyczące medytacji, oraz odpowiedzi na pytania dotyczące podstaw buddyzmu, prosimy o kontakt pod jeden z numer&oacute;w: Sławek - 608 655 884 Zuza - 507 034 172 Bogdan - 605 514 460</p>",
+    "thumbnail": "",
+    "thumbnail_size": "FULL",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "CENTER",
+    "published_date": "2025-06-16T02:41:08Z",
+    "is_published": true,
+    "is_pinned": true,
+    "pin_order": 1,
+    "created_at": "2025-06-16T02:44:20.771Z",
+    "updated_at": "2025-06-20T09:57:02.005Z"
+  }
+},
+{
+  "model": "news.article",
+  "pk": 4,
+  "fields": {
+    "title": "jeszcze nowsza",
+    "slug": "jeszcze-nowsza",
+    "content": "<p>jeszcze nowszy news</p>",
+    "thumbnail": "",
+    "thumbnail_size": "FULL",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "CENTER",
+    "published_date": "2025-06-16T07:24:18Z",
+    "is_published": true,
+    "is_pinned": false,
+    "pin_order": 0,
+    "created_at": "2025-06-16T07:24:54.509Z",
+    "updated_at": "2025-06-16T07:24:54.509Z"
+  }
+},
+{
+  "model": "news.article",
+  "pk": 5,
+  "fields": {
+    "title": "kolejny",
+    "slug": "kolejny",
+    "content": "<p>kolejny news</p>",
+    "thumbnail": "",
+    "thumbnail_size": "FULL",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "CENTER",
+    "published_date": "2025-06-16T07:24:54Z",
+    "is_published": true,
+    "is_pinned": false,
+    "pin_order": 0,
+    "created_at": "2025-06-16T07:25:13.852Z",
+    "updated_at": "2025-06-16T07:25:13.852Z"
+  }
+},
+{
+  "model": "news.article",
+  "pk": 6,
+  "fields": {
+    "title": "Lama Ole",
+    "slug": "lama-ole",
+    "content": "<p>Buddyzm Diamentowej Drogi umożliwia dostęp do autentycznych nauk i medytacji buddyjskich, kt&oacute;re można zastosować we wsp&oacute;łczesnym życiu.</p>\r\n<p><img src=\"../../../../../media/teacher_17_karmapa-150x150_vAKUyUG.jpg\" alt=\"\" width=\"150\" height=\"150\"> <img src=\"../../../../../media/teacher_16_karmapa-150x150_H7uA44O.jpg\" alt=\"\" width=\"150\" height=\"150\"> <img src=\"../../../../../media/Lama_Ole__Hannah_Nydahl_2-150x150.jpg\" alt=\"\" width=\"150\" height=\"150\"></p>\r\n<p>Ośrodki Diamentowej Drogi udostępniają buddyzm w całym Zachodnim świecie w nowoczesny i praktyczny spos&oacute;b, w ponad 30 językach. Zostały założone i są prowadzone przez Lamę Ole Nydahla na prośbę J.Ś. XVI Karmapy i znajdują się pod duchowym zwierzchnictwem J.Ś. XVII Karmapy Taje Dordże.</p>",
+    "thumbnail": "news_thumbnails/Lama_Ole__Hannah_Nydahl_2-150x150.jpg",
+    "thumbnail_size": "FULL",
+    "thumbnail_custom_width": null,
+    "thumbnail_alignment": "CENTER",
+    "published_date": "2025-06-18T17:57:01Z",
+    "is_published": true,
+    "is_pinned": true,
+    "pin_order": 2,
+    "created_at": "2025-06-18T18:34:04.298Z",
+    "updated_at": "2025-06-20T09:57:17.039Z"
+  }
+}
+]
