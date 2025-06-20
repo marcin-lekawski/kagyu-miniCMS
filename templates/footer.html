@@ -1,73 +1,90 @@
-{# templates/footer.html - WERSJA Z LOGOWANIEM #}
+{# templates/footer.html - WERSJA Z DOMYŚLNĄ STOPKĄ ZASTĘPCZĄ #}
 {% if footer_content %}
-<div class="footer-container-custom">
-    <div class="footer-main-content">
-        {# Kolumna 1: Informacje kontaktowe #}
-        <div class="footer-column">
-            <h5 class="footer-title">Kontakt</h5>
-            <div class="footer-text">
-                {{ footer_content.address|safe }}
-                {% if footer_content.contact_phone %}
-                    <p>Tel: <a href="tel:{{ footer_content.contact_phone }}">{{ footer_content.contact_phone }}</a></p>
-                {% endif %}
-                {% if footer_content.contact_email %}
-                    <p>Email: <a href="mailto:{{ footer_content.contact_email }}">{{ footer_content.contact_email }}</a></p>
-                {% endif %}
-            </div>
-        </div>
-
-        {# Kolumna 2: Mapa Strony #}
-        <div class="footer-column">
-            <h5 class="footer-title">Mapa Strony</h5>
-            <ul class="footer-links">
-                <li><a href="{% url 'home' %}">Strona Główna</a></li>
-                {% for page in all_pages %}
-                    {% if page.is_published %}
-                        <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
+    {# --- Twoja istniejąca, w pełni funkcjonalna stopka, gdy dane istnieją w panelu admina --- #}
+    <div class="footer-container-custom">
+        <div class="footer-main-content">
+            {# Kolumna 1: Informacje kontaktowe #}
+            <div class="footer-column">
+                <h5 class="footer-title">Kontakt</h5>
+                <div class="footer-text">
+                    {{ footer_content.address|safe }}
+                    {% if footer_content.contact_phone %}
+                        <p>Tel: <a href="tel:{{ footer_content.contact_phone }}">{{ footer_content.contact_phone }}</a></p>
                     {% endif %}
-                {% endfor %}
-                <li><a href="{% url 'news:archive_all' %}">Archiwum</a></li>
-            </ul>
-        </div>
+                    {% if footer_content.contact_email %}
+                        <p>Email: <a href="mailto:{{ footer_content.contact_email }}">{{ footer_content.contact_email }}</a></p>
+                    {% endif %}
+                </div>
+            </div>
 
-        {# Kolumna 3: Zobacz też #}
-        <div class="footer-column">
-            <h5 class="footer-title">Zobacz też</h5>
-            <div class="footer-html-content">
-                {{ footer_content.zobacz_tez_html|safe }}
+            {# Kolumna 2: Mapa Strony #}
+            <div class="footer-column">
+                <h5 class="footer-title">Mapa Strony</h5>
+                <ul class="footer-links">
+                    <li><a href="{% url 'home' %}">Strona Główna</a></li>
+                    {% for page in all_pages %}
+                        {% if page.is_published %}
+                            <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li><a href="{% url 'news:archive_all' %}">Archiwum</a></li>
+                </ul>
+            </div>
+
+            {# Kolumna 3: Zobacz też #}
+            <div class="footer-column">
+                <h5 class="footer-title">Zobacz też</h5>
+                <div class="footer-html-content">
+                    {{ footer_content.zobacz_tez_html|safe }}
+                </div>
+            </div>
+
+            {# Kolumna 4: Ośrodki i Wsparcie #}
+            <div class="footer-column">
+                <h5 class="footer-title">Ośrodki w pobliżu</h5>
+                <div class="footer-html-content">
+                    {{ footer_content.osrodki_w_poblizu_html|safe }}
+                </div>
+                
+                <h5 class="footer-title mt-4">Wsparcie</h5>
+                <div class="footer-html-content">
+                    {{ footer_content.bank_info_html|safe }}
+                </div>
             </div>
         </div>
 
-        {# Kolumna 4: Ośrodki i Wsparcie #}
-        <div class="footer-column">
-            <h5 class="footer-title">Ośrodki w pobliżu</h5>
-            <div class="footer-html-content">
-                {{ footer_content.osrodki_w_poblizu_html|safe }}
+        {# Dolna sekcja stopki z prawami autorskimi i linkiem do panelu admina #}
+        <div class="footer-bottom">
+            <div class="footer-login">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'admin:index' %}" class="footer-login-link">Panel Admina</a>
+                {% else %}
+                    <a href="{% url 'admin:login' %}" class="footer-login-link">Zaloguj</a>
+                {% endif %}
             </div>
-            
-            <h5 class="footer-title mt-4">Wsparcie</h5>
-            <div class="footer-html-content">
-                {{ footer_content.bank_info_html|safe }}
+            <div class="footer-copyright">
+                {% if footer_content.copyright_text %}
+                    {{ footer_content.copyright_text|safe }}
+                {% else %}
+                    &copy; {% now "Y" %}
+                {% endif %}
             </div>
         </div>
     </div>
-
-    {# NOWA, ZAKTUALIZOWANA DOLNA SEKCJA STOPKI #}
-    <div class="footer-bottom">
-        <div class="footer-login">
-            {% if user.is_authenticated %}
-                <a href="{% url 'admin:index' %}" class="footer-login-link">Panel Admina</a>
-            {% else %}
-                <a href="{% url 'admin:login' %}" class="footer-login-link">Zaloguj</a>
-            {% endif %}
-        </div>
-        <div class="footer-copyright">
-            {% if footer_content.copyright_text %}
-                {{ footer_content.copyright_text|safe }}
-            {% else %}
-                &copy; {% now "Y" %}
-            {% endif %}
+{% else %}
+    {# --- NOWA: Domyślna, prosta stopka, gdy dane nie są uzupełnione w panelu admina --- #}
+    <div class="footer-container-custom">
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <span>Uzupełnij treść stopki w panelu administracyjnym.</span>
+            </div>
+            <div class="footer-login">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'admin:index' %}" class="footer-login-link">Panel Admina</a>
+                {% else %}
+                    <a href="{% url 'admin:login' %}" class="footer-login-link">Zaloguj</a>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 {% endif %}
