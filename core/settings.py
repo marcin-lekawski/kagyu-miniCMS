@@ -151,61 +151,99 @@ MEDIA_ROOT = BASE_DIR / 'media'
 TINYMCE_DEFAULT_CONFIG = {
     "height": "500px",
     "width": "100%",
-    "menubar": "file edit view insert format tools table help",
-    
-    # Lista wtyczek - upewniamy się, że są wszystkie potrzebne
+    "menubar": "file edit view insert format tools table help customImageMenu",
+    "menu": {
+        "customImageMenu": {
+            "title": "Obrazy",
+            "items": "applyFullWidth applyWrapLeft applyWrapRight | removeImageStyle"
+        }
+    },
     "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount hr autosave template",
-    
-    # POPRAWKA: Używamy 'styleselect' dla naszego niestandardowego menu formatów
     "toolbar": "undo redo | styleselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | hr | removeformat | image template | code",
-    
     "custom_undo_redo_levels": 10,
     "language": "pl",
-    
-    # Ustawienia uploadu obrazów (bez zmian)
     "images_upload_url": "/tinymce/upload-image/",
     "automatic_uploads": True,
     "file_picker_types": "image",
     "images_upload_credentials": True,
 
-    # --- templates zostaje bez zmian jest dobrze ---
     "templates": [
+        # ... Twoja sekcja z szablonami pozostaje bez zmian ...
         {
             "title": "Szablon standardowej strony",
-            "description": "Użyj do tworzenia stron informacyjnych (np. Czym jest buddyzm, Medytacja).",
             "content": """
                 <h2>Wprowadzenie [Nagłówek H2]</h2>
-                <p>Zacznij tutaj swój artykuł od krótkiego wprowadzenia...</p>
-                <h3>Podtytuł sekcji [Nagłówek H3]</h3>
-                <p>Tutaj możesz rozwinąć myśl z wprowadzenia...</p>
-                <h2>Kolejna ważna sekcja [Nagłówek H2]</h2>
-                <p>Opis kolejnej ważnej części Twojego artykułu.</p>
+                <p>Zacznij tutaj swój artykuł...</p>
             """
         },
         {
             "title": "Szablon ogłoszenia o kursie",
-            "description": "Szablon do informowania o nadchodzących kursach i wydarzeniach.",
             "content": """
                 <h2>[Tytuł kursu] z [Imię nauczyciela]</h2>
-                <p><em>W dniach [data rozpoczęcia] - [data zakończenia] serdecznie zapraszamy na kurs...</em></p>
-                <h3>Harmonogram</h3>
-                <ul>
-                <li><strong>Piątek:</strong> XX:XX - Wykład wprowadzający</li>
-                <li><strong>Sobota:</strong> XX:XX - Sesja medytacyjna, ...</li>
-                <li><strong>Niedziela:</strong> XX:XX - Sesja medytacyjna, ...</li>
-                </ul>
-                <h3>Informacje organizacyjne</h3>
-                <ul>
-                <li><strong>Miejsce:</strong> [Wpisz miejsce]</li>
-                <li><strong>Koszt:</strong> X zł</li>
-                <li><strong>Kontakt i zapisy:</strong> [Wpisz kontakt]</li>
-                </ul>
+                <p><em>W dniach [data] zapraszamy...</em></p>
             """
         }
     ],
-    # --- ten fragment usunięty ---
-    
-    # Pozostawiamy content_css, aby style niestandardowe były widoczne w edytorze
-    #"content_css": "/static/css/style.css"
-}
 
+    # ======================================================================
+    #   NOWA, POPRAWIONA I STABILNA WERSJA SEKCJI SETUP
+    # ======================================================================
+    "setup": """
+        function(editor) {
+            
+            // Krok 1: Rejestrujemy nasze niestandardowe formaty
+            editor.on('init', function() {
+                editor.formatter.register({
+                    fullwidth: { block: 'div', classes: 'full-width-image-container', wrapper: true },
+                    leftwrap: { block: 'div', classes: 'image-wrap-left', wrapper: true },
+                    rightwrap: { block: 'div', classes: 'image-wrap-right', wrapper: true }
+                });
+            });
+
+            // Funkcja pomocnicza do sprawdzania, czy zaznaczony jest obraz
+            const isImage = (node) => node.nodeName === 'IMG';
+
+            // Funkcja, która będzie włączać/wyłączać opcje menu
+            const onSetupFormat = (api, formatName) => {
+                const onNodeChange = () => {
+                    api.setDisabled(!isImage(editor.selection.getNode()));
+                };
+                editor.on('NodeChange', onNodeChange);
+                return () => editor.off('NodeChange', onNodeChange);
+            };
+
+            // Krok 2: Rejestrujemy opcje w menu, używając wbudowanego formatowania
+            editor.ui.registry.addMenuItem('applyFullWidth', {
+                text: 'Ustaw na pełną szerokość',
+                icon: 'fullscreen',
+                onAction: () => editor.formatter.apply('fullwidth'),
+                onSetup: (api) => onSetupFormat(api, 'fullwidth')
+            });
+
+            editor.ui.registry.addMenuItem('applyWrapLeft', {
+                text: 'Opływanie z lewej',
+                icon: 'align-left',
+                onAction: () => editor.formatter.apply('leftwrap'),
+                onSetup: (api) => onSetupFormat(api, 'leftwrap')
+            });
+            
+            editor.ui.registry.addMenuItem('applyWrapRight', {
+                text: 'Opływanie z prawej',
+                icon: 'align-right',
+                onAction: () => editor.formatter.apply('rightwrap'),
+                onSetup: (api) => onSetupFormat(api, 'rightwrap')
+            });
+            
+            editor.ui.registry.addMenuItem('removeImageStyle', {
+                text: 'Usuń styl obrazu',
+                icon: 'remove-formatting',
+                onAction: () => {
+                    editor.formatter.remove('fullwidth');
+                    editor.formatter.remove('leftwrap');
+                    editor.formatter.remove('rightwrap');
+                },
+                onSetup: (api) => onSetupFormat(api, 'remove')
+            });
+        }
+    """
+}

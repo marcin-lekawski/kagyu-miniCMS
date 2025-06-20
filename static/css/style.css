@@ -119,7 +119,7 @@ body.menu-open footer {
     margin: 30px auto 40px;
     padding: 40px 60px;
     background-color: #ffffff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+    /* box-shadow: 0 0 20px rgba(0,0,0,0.08); */
 }
 
 /* ... Pozostałe style bez zmian ... */
@@ -241,4 +241,50 @@ body.menu-open footer {
     color: #555;
     padding: 10px 20px;
     margin: 20px 0;
+}
+
+/* ==========================================================================
+   10. STYLE DLA ELEMENTÓW PEŁNEJ SZEROKOŚCI I OBRAZÓW
+   ========================================================================== */
+
+/* --- Kontener dla obrazu na pełną szerokość --- */
+.full-width-image-container {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100vw;
+}
+
+.full-width-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- Kontenery dla obrazów opływanych przez tekst --- */
+.image-wrap-left,
+.image-wrap-right {
+    max-width: 55%; /* Obraz zajmie maksymalnie ok. połowy szerokości kontenera */
+    background: #f9f9f9;
+    padding: 8px;
+    border: 1px solid #eee;
+    margin-bottom: 15px;
+}
+
+.image-wrap-left {
+    float: left;
+    margin-right: 20px;
+}
+
+.image-wrap-right {
+    float: right;
+    margin-left: 20px;
+}
+
+.image-wrap-left img,
+.image-wrap-right img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
